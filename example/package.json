@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "plugit": "cordova plugin rm cordova-plugin-feed-fm && cordova plugin add ../plugin"
+    "plugit": "cordova plugin rm cordova-plugin-feed-fm && cordova plugin add --link ../plugin"
   },
   "keywords": [
     "ecosystem:cordova"
@@ -19,9 +19,7 @@
   },
   "devDependencies": {},
   "cordova": {
-    "plugins": {
-      "cordova-plugin-feed-fm": {}
-    },
+    "plugins": {},
     "platforms": [
       "ios"
     ]

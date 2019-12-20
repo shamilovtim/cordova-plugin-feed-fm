@@ -16,5 +16,14 @@
         </config-file>
         <header-file src="src/ios/CordovaPluginFeedFm.h" />
         <source-file src="src/ios/CordovaPluginFeedFm.m" />
+        <podspec>
+            <config>
+                <source url="https://github.com/feedfm/iOS-SDK.git" />
+                <source url="https://github.com/CocoaPods/Specs.git"/>
+            </config>
+            <pods use-frameworks="true">
+                <pod name="FeedMedia" spec="~> 4.3.6" />
+            </pods>
+        </podspec>
     </platform>
 </plugin>
