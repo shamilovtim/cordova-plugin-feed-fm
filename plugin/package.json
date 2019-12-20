@@ -1,0 +1,24 @@
+{
+  "name": "CordovaPluginFeedFm",
+  "version": "0.0.1",
+  "description": "Cordova Plugin for the native Feed.fm SDK",
+  "cordova": {
+    "id": "cordova-plugin-feed-fm",
+    "platforms": [
+      "ios",
+      "android"
+    ]
+  },
+  "keywords": [
+    "cordova",
+    "feed",
+    "feed.fm",
+    "feedfm",
+    "ionic",
+    "ecosystem:cordova",
+    "cordova-ios",
+    "cordova-android"
+  ],
+  "author": "Timothy Shamilov",
+  "license": "MIT"
+}
