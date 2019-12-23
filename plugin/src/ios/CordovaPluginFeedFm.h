@@ -1,4 +1,5 @@
 #import <Cordova/CDVPlugin.h>
+#import "FeedMedia/FeedMediaCore.h"
 
 @interface CordovaPluginFeedFm : CDVPlugin
 
@@ -6,5 +7,6 @@
 
 - (void)echo:(CDVInvokedUrlCommand*)command;
 - (void)play:(CDVInvokedUrlCommand*)command;
+- (void)pause:(CDVInvokedUrlCommand*)command;
 
 @end

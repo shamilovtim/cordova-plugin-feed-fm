@@ -46,10 +46,12 @@
     [player stop];
 }
 
--(void)setVolume: (float)volume
+-(void)setVolume:(CDVInvokedUrlCommand*)command
 {
+    NSNumber *volume = [command argumentAtIndex:0];
     FMAudioPlayer *player = [FMAudioPlayer sharedPlayer];
-    player.mixVolume = volume;
+    NSLog(@"set volume to %fl", [volume floatValue]);
+    player.mixVolume = [volume floatValue];
 }
 
 -(void)requestClientId
@@ -181,6 +183,7 @@
     // @"state-change"
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{
         @"state": @(state) }];
+
 }
 
 - (void) onCurrentItemDidBeginPlaybackNotification: (NSNotification *)notification {

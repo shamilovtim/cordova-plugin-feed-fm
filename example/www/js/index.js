@@ -26,6 +26,10 @@ var app = {
     // listen for stop button
     var stop = document.getElementById("stop");
     stop.addEventListener("click", app.stop, false);
+
+    // listen for setVolume button
+    var setVolume = document.getElementById("setVolume");
+    setVolume.addEventListener("click", app.setVolume, false);
   },
 
   onDeviceReady: function() {
@@ -68,17 +72,64 @@ var app = {
 
     console.log("Received Event: " + id);
   },
-
-  playVideo: function() {
+  play: function() {
     console.log("play method called");
     CordovaPluginFeedFm.play(
-      "FeedFM play function ",
       function(msg) {
         console.log("play function success", msg);
       },
       function(err) {
         console.log("play function fail", err);
-      }
+      },
+      "FeedFM play function"
+    );
+  },
+  pause: function() {
+    console.log("pause method called");
+    CordovaPluginFeedFm.pause(
+      function(msg) {
+        console.log("pause function success ", msg);
+      },
+      function(err) {
+        console.log("pause function fail ", err);
+      },
+      "FeedFM pause function"
+    );
+  },
+  skip: function() {
+    console.log("skip method called");
+    CordovaPluginFeedFm.skip(
+      function(msg) {
+        console.log("skip function success", msg);
+      },
+      function(err) {
+        console.log("skip function fail", err);
+      },
+      "FeedFM skip function "
+    );
+  },
+  stop: function() {
+    console.log("stop method called");
+    CordovaPluginFeedFm.stop(
+      function(msg) {
+        console.log("stop function success ", msg);
+      },
+      function(err) {
+        console.log("stop function fail ", err);
+      },
+      "FeedFM stop function "
+    );
+  },
+  setVolume: function() {
+    console.log("setVolume method called");
+    CordovaPluginFeedFm.setVolume(
+      function(msg) {
+        console.log("setVolume function success ", msg);
+      },
+      function(err) {
+        console.log("setVolume function fail ", err);
+      },
+      10
     );
   }
 };
