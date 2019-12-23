@@ -19,7 +19,9 @@
   },
   "devDependencies": {},
   "cordova": {
-    "plugins": {},
+    "plugins": {
+      "cordova-plugin-feed-fm": {}
+    },
     "platforms": [
       "ios"
     ]
