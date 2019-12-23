@@ -1,5 +1,6 @@
 #import "CordovaPluginFeedFm.h"
 #import <Cordova/CDVPlugin.h>
+#import "FeedMedia/FeedMediaCore.h"
 
 @implementation CordovaPluginFeedFm
 
@@ -15,6 +16,13 @@
     }
 
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+-(void)play:(CDVInvokedUrlCommand*)command
+{
+    FMAudioPlayer *player = [FMAudioPlayer sharedPlayer];
+    NSLog(@"native play method calle");
+    [player play];
 }
 
 @end
