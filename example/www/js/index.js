@@ -1,11 +1,31 @@
 var app = {
   // Application Constructor
   initialize: function() {
+    app.setupListeners();
+
     document.addEventListener(
       "deviceready",
       this.onDeviceReady.bind(this),
       false
     );
+  },
+
+  setupListeners: function() {
+    // listen for play button
+    var play = document.getElementById("play");
+    play.addEventListener("click", app.play, false);
+
+    // listen for pause button
+    var pause = document.getElementById("pause");
+    pause.addEventListener("click", app.pause, false);
+
+    // listen for skip button
+    var skip = document.getElementById("skip");
+    skip.addEventListener("click", app.skip, false);
+
+    // listen for stop button
+    var stop = document.getElementById("stop");
+    stop.addEventListener("click", app.stop, false);
   },
 
   onDeviceReady: function() {
@@ -47,6 +67,19 @@ var app = {
     receivedElement.setAttribute("style", "display:block;");
 
     console.log("Received Event: " + id);
+  },
+
+  playVideo: function() {
+    console.log("play method called");
+    CordovaPluginFeedFm.play(
+      "FeedFM play function ",
+      function(msg) {
+        console.log("play function success", msg);
+      },
+      function(err) {
+        console.log("play function fail", err);
+      }
+    );
   }
 };
 
