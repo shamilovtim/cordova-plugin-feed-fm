@@ -13,11 +13,35 @@
   ],
   "author": "Apache Cordova Team",
   "license": "Apache-2.0",
+  "watch": {
+    "cordova prepare": {
+      "patterns": [
+        "app"
+      ],
+      "extensions": "js,html,css",
+      "quiet": false
+    },
+    "run_ios": {
+      "patterns": [
+        "app"
+      ],
+      "extensions": "ts,html,scss",
+      "quiet": false
+    }
+  },
+  "scripts": {
+    "watch_android": "npm-watch run_android",
+    "watch_ios": "npm-watch run_ios",
+    "run_android": "tns run android --emulator",
+    "run_ios": "tns run ios --emulator"
+  },
   "dependencies": {
     "CordovaPluginFeedFm": "file:../plugin",
     "cordova-ios": "^5.1.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "npm-watch": "^0.6.0"
+  },
   "cordova": {
     "plugins": {
       "cordova-plugin-feed-fm": {}
