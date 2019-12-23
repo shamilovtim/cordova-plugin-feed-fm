@@ -116,8 +116,13 @@
     return outStations;
 }
 
--(void) initializeWithToken:(NSString *)token secret:(NSString *)secret enableBackgroundMusic:(BOOL)enableBackgroundMusic {
+-(void) initializeWithToken:(CDVInvokedUrlCommand*)command {
+    NSString* token = [command.arguments objectAtIndex:0];
+    NSString* secret = [command.arguments objectAtIndex:1];
+    BOOL enableBackgroundMusic = [command.arguments objectAtIndex:2];
+    
     FMLogSetLevel(FMLogLevelDebug);
+    NSLog(@"native initializeWithToken called");
 
     _player = FMAudioPlayer.sharedPlayer;
     _player.disableSongStartNotifications = YES;

@@ -3,14 +3,14 @@ var app = {
   initialize: function() {
     app.setupListeners();
 
-    document.addEventListener(
-      "deviceready",
-      this.onDeviceReady.bind(this),
-      false
-    );
+    document.addEventListener("deviceready", this.onDeviceReady.bind(this), false);
   },
 
   setupListeners: function() {
+    // listen for initializeWithToken button
+    var initializeWithToken = document.getElementById("initializeWithToken");
+    initializeWithToken.addEventListener("click", app.initializeWithToken, false);
+
     // listen for play button
     var play = document.getElementById("play");
     play.addEventListener("click", app.play, false);
@@ -39,13 +39,10 @@ var app = {
     CordovaPluginFeedFm.echo(
       "FeedFM native echo function working!",
       function(msg) {
-        document
-          .getElementById("deviceready")
-          .querySelector(".received").innerHTML = msg;
+        document.getElementById("deviceready").querySelector(".received").innerHTML = msg;
       },
       function(err) {
-        document.getElementById("deviceready").innerHTML =
-          '<p class="event received">' + err + "</p>";
+        document.getElementById("deviceready").innerHTML = '<p class="event received">' + err + "</p>";
       }
     );
 
@@ -71,6 +68,19 @@ var app = {
     receivedElement.setAttribute("style", "display:block;");
 
     console.log("Received Event: " + id);
+  },
+  initializeWithToken: function() {
+    console.log("initializeWithToken method called");
+    CordovaPluginFeedFm.initializeWithToken(
+      function(msg) {
+        console.log("initializeWithToken function success ", msg);
+      },
+      function(err) {
+        console.log("initializeWithToken function fail ", err);
+      },
+      "cc1783f3b77faefebc3b4065665cf316f1bc34d2",
+      "711ac508971f37972eeef5a153239587812fc7dd"
+    );
   },
   play: function() {
     console.log("play method called");
@@ -129,7 +139,7 @@ var app = {
       function(err) {
         console.log("setVolume function fail ", err);
       },
-      10
+      5
     );
   }
 };

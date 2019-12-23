@@ -3,6 +3,13 @@ var exec = require("cordova/exec");
 exports.echo = function(success, error, arg0) {
   exec(success, error, "CordovaPluginFeedFm", "echo", [arg0]);
 };
+exports.initializeWithToken = function(success, error, token, secret, enableBackgroundMusic) {
+  exec(success, error, "CordovaPluginFeedFm", "initializeWithToken", [
+    token,
+    secret,
+    enableBackgroundMusic
+  ]);
+};
 exports.play = function(success, error, arg0) {
   exec(success, error, "CordovaPluginFeedFm", "play", [arg0]);
 };
