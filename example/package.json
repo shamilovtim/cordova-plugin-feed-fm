@@ -5,8 +5,9 @@
   "description": "A sample Apache Cordova application that responds to the deviceready event.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "plugit": "cordova plugin rm cordova-plugin-feed-fm && cordova plugin add --link ../plugin"
+    "watch": "npm-watch",
+    "prepare": "cordova prepare",
+    "build_plugin": "cordova plugin rm cordova-plugin-feed-fm && cordova plugin add --link ../plugin"
   },
   "keywords": [
     "ecosystem:cordova"
@@ -14,26 +15,23 @@
   "author": "Apache Cordova Team",
   "license": "Apache-2.0",
   "watch": {
-    "cordova prepare": {
+    "prepare": {
       "patterns": [
-        "app"
+        "www",
+        "plugins",
+        "hooks"
       ],
-      "extensions": "js,html,css",
+      "extensions": "js,html,css,xml,jpeg,jpg,png",
       "quiet": false
     },
-    "run_ios": {
+    "build_plugin": {
       "patterns": [
-        "app"
+        "../plugin"
       ],
-      "extensions": "ts,html,scss",
-      "quiet": false
+      "extensions": "js,xml,json",
+      "quiet": false,
+      "runOnChangeOnly": true
     }
-  },
-  "scripts": {
-    "watch_android": "npm-watch run_android",
-    "watch_ios": "npm-watch run_ios",
-    "run_android": "tns run android --emulator",
-    "run_ios": "tns run ios --emulator"
   },
   "dependencies": {
     "CordovaPluginFeedFm": "file:../plugin",
