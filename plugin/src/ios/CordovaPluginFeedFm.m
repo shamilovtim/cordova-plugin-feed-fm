@@ -52,6 +52,16 @@
     player.mixVolume = volume;
 }
 
+-(void)requestClientId
+{
+    FMAudioPlayer *player = [FMAudioPlayer sharedPlayer];
+    NSString *str = [player getClientId];
+
+    CDVPluginResult* pluginResult = nil;
+    // @"newClientID"
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"ClientID":str}];
+}
+
 -(void)setClientId: (NSString*)cid
 {
     FMAudioPlayer *player = [FMAudioPlayer sharedPlayer];
@@ -142,6 +152,55 @@
                                              selector:@selector(onCurrentItemDidBeginPlaybackNotification:) name:FMAudioPlayerCurrentItemDidBeginPlaybackNotification object:_player];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(onSkipFailedNotification:) name:FMAudioPlayerSkipFailedNotification object:_player];
+}
+
+- (void) onSkipFailedNotification: (NSNotification *)notification {
+    CDVPluginResult* pluginResult = nil;
+
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"skip failed"];
+}
+
+- (void) onActiveStationDidChangeNotification: (NSNotification *)notification {
+    CDVPluginResult* pluginResult = nil;
+
+    // @"station-change"
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{
+        @"activeStationId": _player.activeStation.identifier }];
+}
+
+- (void) onPlaybackStateDidChangeNotification: (NSNotification *)notification {
+    FMAudioPlayerPlaybackState state =_player.playbackState;
+
+    // this might cause a notice when the state doesn't actually change, but I think
+    // it's worth it to weed this state out
+    if (state == FMAudioPlayerPlaybackStateComplete) {
+        state = FMAudioPlayerPlaybackStateReadyToPlay;
+    }
+
+    CDVPluginResult* pluginResult = nil;
+    // @"state-change"
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{
+        @"state": @(state) }];
+}
+
+- (void) onCurrentItemDidBeginPlaybackNotification: (NSNotification *)notification {
+    FMAudioItem *current = _player.currentItem;
+
+    long duration = lroundf(_player.currentItemDuration);
+
+    CDVPluginResult* pluginResult = nil;
+    // @"play-started"
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{
+        @"play": @{
+                @"id": current.playId,
+                @"title": current.name,
+                @"artist": current.artist,
+                @"album": current.album,
+                @"metadata": current.metadata,
+                @"canSkip": @(_player.canSkip),
+                @"duration": @(duration)
+        }
+    }];
 }
 
 // RN thing
