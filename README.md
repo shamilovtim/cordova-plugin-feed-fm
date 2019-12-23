@@ -10,8 +10,8 @@
     <img src="https://feed.fm/images/feedfm-logo-greyred.png" alt="Logo">
   </a>
 
-  <h2 align="center">Cordova plugin for Feed.FM FeedMedia native SDK</h2>
-  <h2 align="center">By: Timothy Shamilov</h2>
+  <h3 align="center">Cordova plugin for Feed.FM FeedMedia native SDK</h2>
+  <h4 align="center">By: Timothy Shamilov</h4>
 
   <p align="center">
     Uses the FeedMedia CocoaPod on iOS
