@@ -10,6 +10,9 @@ exports.initializeWithToken = function(success, error, token, secret, enableBack
     enableBackgroundMusic
   ]);
 };
+exports.setActiveStation = function(success, error, id) {
+  exec(success, error, "CordovaPluginFeedFm", "setActiveStation", [id]);
+};
 exports.play = function(success, error, arg0) {
   exec(success, error, "CordovaPluginFeedFm", "play", [arg0]);
 };

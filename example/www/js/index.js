@@ -11,6 +11,10 @@ var app = {
     var initializeWithToken = document.getElementById("initializeWithToken");
     initializeWithToken.addEventListener("click", app.initializeWithToken, false);
 
+    // listen for setActiveStation button
+    var setActiveStation = document.getElementById("setActiveStation");
+    setActiveStation.addEventListener("click", app.setActiveStation, false);
+
     // listen for play button
     var play = document.getElementById("play");
     play.addEventListener("click", app.play, false);
@@ -140,6 +144,18 @@ var app = {
         console.log("setVolume function fail ", err);
       },
       5
+    );
+  },
+  setActiveStation: function() {
+    console.log("setActiveStation method called");
+    CordovaPluginFeedFm.setActiveStation(
+      function(msg) {
+        console.log("setActiveStation function success ", msg);
+      },
+      function(err) {
+        console.log("setActiveStation function fail ", err);
+      },
+      166138
     );
   }
 };

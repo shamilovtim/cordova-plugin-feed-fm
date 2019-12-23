@@ -76,9 +76,11 @@
     [player createNewClientId];
 }
 
--(void)setActiveStation:(NSString *)id
+-(void)setActiveStation:(CDVInvokedUrlCommand*)command
 {
     CDVPluginResult* pluginResult = nil;
+    NSString* id = [command.arguments objectAtIndex:0];
+
     NSString *errorMessage = [NSString stringWithFormat:@"Cannot set active station to %@ because no station found with that id", id];
 
     NSUInteger index = [_player.stationList indexOfObjectPassingTest:^BOOL(FMStation *station, NSUInteger idx, BOOL * _Nonnull stop) {
