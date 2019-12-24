@@ -46,7 +46,10 @@ You will need the following global dependencies:
 
 ## Setting up local env
 
-1. TBD
+1. terminal window 1: `cd example`
+2. terminal window 1: `cordova platform add <yourplatform>`
+3. terminal window 1: `npm run watch &`
+4. new terminal window 2: `cordova emulate <yourplatform>`
 
 ## Local workflow
 
