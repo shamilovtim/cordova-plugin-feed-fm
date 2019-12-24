@@ -87,7 +87,8 @@ var app = {
         logger().log("initializeWithToken fail " + JSON.stringify(err), "e");
       },
       "cc1783f3b77faefebc3b4065665cf316f1bc34d2",
-      "711ac508971f37972eeef5a153239587812fc7dd"
+      "711ac508971f37972eeef5a153239587812fc7dd",
+      false
     );
   },
   play: function() {

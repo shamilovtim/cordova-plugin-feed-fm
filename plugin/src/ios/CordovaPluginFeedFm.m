@@ -107,7 +107,7 @@
 -(void) initializeWithToken:(CDVInvokedUrlCommand*)command {
     NSString* token = [command.arguments objectAtIndex:0];
     NSString* secret = [command.arguments objectAtIndex:1];
-    BOOL enableBackgroundMusic = [command.arguments objectAtIndex:2];
+    BOOL enableBackgroundMusic = [[command.arguments objectAtIndex:2] boolValue];
     
     FMLogSetLevel(FMLogLevelDebug);
     NSLog(@"native initializeWithToken called");
@@ -129,7 +129,7 @@
             @"stations": [self mapStationListToDictionary:self->_player.stationList],
             @"activeStationId": station.identifier
         }];
-        
+
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     } notAvailable:^{
         CDVPluginResult* pluginResult = nil;
@@ -137,7 +137,7 @@
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{
             @"available": @NO
         }];
-        
+
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }];
 
