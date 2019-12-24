@@ -80,6 +80,7 @@
 {
     CDVPluginResult* pluginResult = nil;
     NSString* id = [command.arguments objectAtIndex:0];
+    NSLog(@"native setActiveStation method called");
 
     NSString *errorMessage = [NSString stringWithFormat:@"Cannot set active station to %@ because no station found with that id", id];
 
@@ -89,10 +90,12 @@
 
     if (index == NSNotFound) {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:errorMessage];
+        NSLog(@"cannot set thing with id, %@ and index %lu", id, index);
         return;
     }
 
     _player.activeStation = _player.stationList[index];
+    NSLog(@"did set thing with id, %@ and index %lu", id, index);
 }
 
 - (void) onNewClientIDGenerated: (NSNotification*)notification  {
@@ -102,20 +105,6 @@
     if(str != nil){
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"ClientID":str}];
     }
-}
-
-- (NSArray<NSDictionary *> *) mapStationListToDictionary: (FMStationArray *) inStations {
-    NSMutableArray<NSDictionary *> *outStations = [[NSMutableArray alloc] init];
-
-    for (FMStation *station in inStations) {
-        [outStations addObject:@{
-            @"id": station.identifier,
-            @"name": station.name,
-            @"options": station.options
-        }];
-    }
-
-    return outStations;
 }
 
 -(void) initializeWithToken:(CDVInvokedUrlCommand*)command {
@@ -143,12 +132,16 @@
             @"stations": [self mapStationListToDictionary:self->_player.stationList],
             @"activeStationId": station.identifier
         }];
+        
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     } notAvailable:^{
         CDVPluginResult* pluginResult = nil;
 
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{
             @"available": @NO
         }];
+        
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -211,6 +204,21 @@
                 @"duration": @(duration)
         }
     }];
+}
+
+// helper
+- (NSArray<NSDictionary *> *) mapStationListToDictionary: (FMStationArray *) inStations {
+    NSMutableArray<NSDictionary *> *outStations = [[NSMutableArray alloc] init];
+
+    for (FMStation *station in inStations) {
+        [outStations addObject:@{
+            @"id": station.identifier,
+            @"name": station.name,
+            @"options": station.options
+        }];
+    }
+
+    return outStations;
 }
 
 // RN thing
