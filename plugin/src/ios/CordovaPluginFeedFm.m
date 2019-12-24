@@ -194,9 +194,7 @@
     CDVPluginResult* pluginResult = nil;
     // @"state-change"
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{
-        @"state": @(state) }];;
-    [pluginResult setKeepCallbackAsBool:true];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
+        @"state": @(state) }];
 }
 
 - (void) onCurrentItemDidBeginPlaybackNotification: (NSNotification *)notification {
