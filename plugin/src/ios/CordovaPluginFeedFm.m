@@ -101,15 +101,6 @@
     NSLog(@"did set thing with id, %@ and index %lu", id, index);
 }
 
-- (void) onNewClientIDGenerated: (NSNotification*)notification  {
-    NSString *str = [notification.userInfo valueForKey:@"client_id"];
-    CDVPluginResult* pluginResult = nil;
-
-    if(str != nil){
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"ClientID":str}];
-    }
-}
-
 -(void) initializeWithToken:(CDVInvokedUrlCommand*)command {
     NSString* token = [command.arguments objectAtIndex:0];
     NSString* secret = [command.arguments objectAtIndex:1];
@@ -157,6 +148,17 @@
                                              selector:@selector(onCurrentItemDidBeginPlaybackNotification:) name:FMAudioPlayerCurrentItemDidBeginPlaybackNotification object:_player];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(onSkipFailedNotification:) name:FMAudioPlayerSkipFailedNotification object:_player];
+}
+
+- (void) onNewClientIDGenerated: (NSNotification*)notification  {
+    NSString *str = [notification.userInfo valueForKey:@"client_id"];
+    CDVPluginResult* pluginResult = nil;
+
+    if(str != nil){
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"ClientID":str}];
+        [pluginResult setKeepCallbackAsBool:true];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
+    }
 }
 
 - (void) onSkipFailedNotification: (NSNotification *)notification {
