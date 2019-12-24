@@ -1,6 +1,7 @@
 var app = {
   // Application Constructor
   initialize: function() {
+    logger().log("App initialized");
     app.setupListeners();
 
     document.addEventListener("deviceready", this.onDeviceReady.bind(this), false);
@@ -77,10 +78,13 @@ var app = {
     console.log("initializeWithToken method called");
     CordovaPluginFeedFm.initializeWithToken(
       function(msg) {
-        console.log("initializeWithToken function success ", msg);
+        console.log("initializeWithToken success returned:", msg);
+        logger().log(JSON.stringify(msg, null, 4));
+        logger().log("initializeWithToken success returned:");
       },
       function(err) {
-        console.log("initializeWithToken function fail ", err);
+        console.log("initializeWithToken fail ", err);
+        logger().log("initializeWithToken fail " + JSON.stringify(err), "e");
       },
       "cc1783f3b77faefebc3b4065665cf316f1bc34d2",
       "711ac508971f37972eeef5a153239587812fc7dd"
@@ -90,10 +94,13 @@ var app = {
     console.log("play method called");
     CordovaPluginFeedFm.play(
       function(msg) {
-        console.log("play function success", msg);
+        console.log("play success", msg);
+        logger().log(JSON.stringify(msg, null, 4));
+        logger().log("play success returned::");
       },
       function(err) {
-        console.log("play function fail", err);
+        console.log("play fail ", err);
+        logger().log("play fail " + JSON.stringify(err), "e");
       },
       "FeedFM play function"
     );
@@ -102,10 +109,13 @@ var app = {
     console.log("pause method called");
     CordovaPluginFeedFm.pause(
       function(msg) {
-        console.log("pause function success ", msg);
+        console.log("pause success ", msg);
+        logger().log(JSON.stringify(msg, null, 4));
+        logger().log("pause success returned:");
       },
       function(err) {
-        console.log("pause function fail ", err);
+        console.log("pause fail ", err);
+        logger().log("pause fail " + JSON.stringify(err), "e");
       },
       "FeedFM pause function"
     );
@@ -114,10 +124,13 @@ var app = {
     console.log("skip method called");
     CordovaPluginFeedFm.skip(
       function(msg) {
-        console.log("skip function success", msg);
+        console.log("skip success ", msg);
+        logger().log(JSON.stringify(msg, null, 4));
+        logger().log("skip success returned::");
       },
       function(err) {
-        console.log("skip function fail", err);
+        console.log("skip function fail ", err);
+        logger().log("pause fail " + JSON.stringify(err), "e");
       },
       "FeedFM skip function "
     );
@@ -126,10 +139,13 @@ var app = {
     console.log("stop method called");
     CordovaPluginFeedFm.stop(
       function(msg) {
-        console.log("stop function success ", msg);
+        console.log("stop success ", msg);
+        logger().log(JSON.stringify(msg, null, 4));
+        logger().log("stop success returned:");
       },
       function(err) {
-        console.log("stop function fail ", err);
+        console.log("stop fail ", err);
+        logger().log("stop fail " + JSON.stringify(err), "e");
       },
       "FeedFM stop function "
     );
@@ -138,10 +154,13 @@ var app = {
     console.log("setVolume method called");
     CordovaPluginFeedFm.setVolume(
       function(msg) {
-        console.log("setVolume function success ", msg);
+        console.log("setVolume success ", msg);
+        logger().log(JSON.stringify(msg, null, 4));
+        logger().log("setVolume success returned:");
       },
       function(err) {
-        console.log("setVolume function fail ", err);
+        console.log("setVolume fail ", err);
+        logger().log("setVolume fail " + JSON.stringify(err), "e");
       },
       5
     );
@@ -150,10 +169,13 @@ var app = {
     console.log("setActiveStation method called");
     CordovaPluginFeedFm.setActiveStation(
       function(msg) {
-        console.log("setActiveStation function success ", msg);
+        console.log("setActiveStation success ", msg);
+        logger().log(JSON.stringify(msg, null, 4));
+        logger().log("setActiveStation success returned:");
       },
       function(err) {
-        console.log("setActiveStation function fail ", err);
+        console.log("setActiveStation fail ", err);
+        logger().log("setActiveStation fail " + JSON.stringify(err), "e");
       },
       "175692"
     );
