@@ -235,33 +235,4 @@
 
     return outStations;
 }
-
-// RN thing
-- (NSArray<NSString *> *)supportedEvents {
-    return @[
-        @"newClientID",
-        @"availability",
-        @"state-change",
-        @"station-change",
-        @"play-started",
-        @"skip-failed"
-    ];
-}
-
-// RN thing
-- (NSDictionary *)constantsToExport
-{
-    return @{
-        @"audioPlayerPlaybackStateOfflineOnly": @(FMAudioPlayerPlaybackStateOfflineOnly),
-        @"audioPlayerPlaybackStateUninitialized": @(FMAudioPlayerPlaybackStateUninitialized),
-        @"audioPlayerPlaybackStateUnavailable": @(FMAudioPlayerPlaybackStateUnavailable),
-        @"audioPlayerPlaybackStateWaitingForItem": @(FMAudioPlayerPlaybackStateWaitingForItem),
-        @"audioPlayerPlaybackStateReadyToPlay": @(FMAudioPlayerPlaybackStateReadyToPlay),
-        @"audioPlayerPlaybackStatePlaying": @(FMAudioPlayerPlaybackStatePlaying),
-        @"audioPlayerPlaybackStatePaused": @(FMAudioPlayerPlaybackStatePaused),
-        @"audioPlayerPlaybackStateStalled": @(FMAudioPlayerPlaybackStateStalled),
-        @"audioPlayerPlaybackStateRequestingSkip": @(FMAudioPlayerPlaybackStateRequestingSkip)
-    };
-};
-
 @end
