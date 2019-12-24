@@ -35,6 +35,24 @@
 ├── plugin        # plugin source
 ```
 
+## Usage
+
+initialize the plugin
+
+```typescript
+CordovaPluginFeedFm.initializeWithToken(success: Function, error: Function, token: string, secret: string, enableBackgroundMusic: boolean);
+```
+
+set active station
+
+```typescript
+CordovaPluginFeedFm.setActiveStation(success: Function, error: Function, stationId: string);
+
+/// returns
+
+{activeStationId: "175691", available: true, stations: [{id: "175691", name: "Top40", options: {}}, {id: "175692", name: "Electronic", options: {}}, {id: "175693", name: "Hip Hop", options: {}}, …]}
+```
+
 # Plugin Development
 
 The dev environment used for this project was macOS. Instructions for any other OS aren't provided and will be unreliable.
