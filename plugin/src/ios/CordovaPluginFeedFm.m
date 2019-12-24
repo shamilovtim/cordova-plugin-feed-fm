@@ -57,18 +57,19 @@
     player.mixVolume = [volume floatValue];
 }
 
--(void)requestClientId
+-(void)requestClientId:(CDVInvokedUrlCommand*)command
 {
     FMAudioPlayer *player = [FMAudioPlayer sharedPlayer];
     NSString *str = [player getClientId];
 
     CDVPluginResult* pluginResult = nil;
-    // @"newClientID"
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"ClientID":str}];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
--(void)setClientId: (NSString*)cid
+-(void)setClientId:(CDVInvokedUrlCommand*)command
 {
+    NSString* cid = [command.arguments objectAtIndex:0];
     FMAudioPlayer *player = [FMAudioPlayer sharedPlayer];
     [player setClientId:cid];
 }
@@ -88,9 +89,11 @@
     NSString *errorMessage = [NSString stringWithFormat:@"Cannot set active station to %@ because no station found with that id", id];
 
     NSUInteger index = [_player.stationList indexOfObjectPassingTest:^BOOL(FMStation *station, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSLog(@"checked for station.identifier %@ and id %@", station.identifier, id);
         return [station.identifier isEqualToString:id];
     }];
 
+    NSLog(@"cannot set thing with id, %@ and index %lu", id, index);
     if (index == NSNotFound) {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:errorMessage];
         NSLog(@"cannot set thing with id, %@ and index %lu", id, index);
