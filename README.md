@@ -65,10 +65,6 @@ This watches two locations:
 - in ../example/ it watches html, css, js and assets. upon updates it compiles that code.
 - in ../plugin/ it watches js, xml and json. upon updates it re-adds the plugin.
 
-## Debugging
-
-I currently can't see webview javascript console.logs in xCode console but I'm working on a solution for this.
-
 ## Key Commands
 
 - `npm run watch &` in ../example/ persistently runs nodemon to watch for changes
