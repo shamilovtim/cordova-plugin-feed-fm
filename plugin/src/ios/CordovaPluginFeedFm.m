@@ -2,7 +2,9 @@
 #import <Cordova/CDVPlugin.h>
 #import "FeedMedia/FeedMediaCore.h"
 
-@implementation CordovaPluginFeedFm
+@implementation CordovaPluginFeedFm {
+    NSString* callbackId;
+}
 
 - (void)echo:(CDVInvokedUrlCommand*)command
 {
@@ -22,6 +24,7 @@
 {
     NSLog(@"native play method called");
     FMAudioPlayer *player = [FMAudioPlayer sharedPlayer];
+    callbackId = command.callbackId;
     [player play];
 }
 
@@ -160,6 +163,8 @@
     CDVPluginResult* pluginResult = nil;
 
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"skip failed"];
+    [pluginResult setKeepCallbackAsBool:true];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
 }
 
 - (void) onActiveStationDidChangeNotification: (NSNotification *)notification {
@@ -168,6 +173,8 @@
     // @"station-change"
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{
         @"activeStationId": _player.activeStation.identifier }];
+    [pluginResult setKeepCallbackAsBool:true];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
 }
 
 - (void) onPlaybackStateDidChangeNotification: (NSNotification *)notification {
@@ -182,8 +189,9 @@
     CDVPluginResult* pluginResult = nil;
     // @"state-change"
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{
-        @"state": @(state) }];
-
+        @"state": @(state) }];;
+    [pluginResult setKeepCallbackAsBool:true];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
 }
 
 - (void) onCurrentItemDidBeginPlaybackNotification: (NSNotification *)notification {
@@ -204,6 +212,8 @@
                 @"duration": @(duration)
         }
     }];
+    [pluginResult setKeepCallbackAsBool:true];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
 }
 
 // helper
