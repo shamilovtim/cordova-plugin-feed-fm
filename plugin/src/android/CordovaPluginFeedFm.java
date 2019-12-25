@@ -25,10 +25,12 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
 
     private FeedAudioPlayer mFeedAudioPlayer;
     private Context applicationContext;
+    private CallbackContext cordovaCallback;
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         applicationContext = this.cordova.getActivity().getApplicationContext();
+        cordovaCallback = callbackContext;
 
         if (action.equals("echo")) {
             Log.i("CordovaPluginFeedFm", "Native echo call");
@@ -74,9 +76,9 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
             public void onPlayerAvailable(FeedAudioPlayer feedAudioPlayer) {
                 try {
                     Integer activeStationId = mFeedAudioPlayer.getActiveStation().getId();
-                    Boolean isOnline = !mFeedAudioPlayer.getActiveStation().isTypeOffline();
+                    Boolean available = true;
                     String stations = mFeedAudioPlayer.getStationList().toString();
-                    String response = String.format("{activeStationId: %d, available: %s, stations: %s}", activeStationId, isOnline, stations);
+                    String response = String.format("{activeStationId: %d, available: %s, stations: %s}", activeStationId, available, stations);
                     callbackContext.success(response);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -85,9 +87,8 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
 
             @Override
             public void onPlayerUnavailable(Exception e) {
-//                WritableMap params = Arguments.createMap();
-//                params.putBoolean("available", false);
-//                sendEvent(reactContext, "availability", params);
+                String response = String.format("{available: %s}", false);
+                callbackContext.error(response);
             }
         };
 
@@ -119,29 +120,17 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
 
     @Override
     public void onPlayStarted(Play play) {
-//
-//        String str  = toJson(play.getAudioFile().getOptions());
-//
-//        try {
-//            JSONObject object = new JSONObject(str);
-//            WritableMap options  = convertJsonToMap(object);
-//            WritableMap playParams = Arguments.createMap();
-//            playParams.putMap("metadata",options);
-//            playParams.putString("id", play.getAudioFile().getId());
-//            playParams.putString("title", play.getAudioFile().getTrack().getTitle());
-//            playParams.putString("artist", play.getAudioFile().getArtist().getName());
-//            playParams.putString("album", play.getAudioFile().getRelease().getTitle());
-//            playParams.putString("artist", play.getAudioFile().getArtist().getName());
-//            playParams.putBoolean("canSkip", mFeedAudioPlayer.canSkip());
-//            playParams.putInt("duration", (int)play.getAudioFile().getDurationInSeconds());
-//            WritableMap params = Arguments.createMap();
-//            params.putMap("play", playParams);
-//            sendEvent(reactContext, "play-started", params);
-//
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
+        String options = play.getAudioFile().getOptions().toString();
+        String id = play.getAudioFile().getId();
+        String title = play.getAudioFile().getTrack().getTitle();
+        String artist = play.getAudioFile().getArtist().getName();
+        String album = play.getAudioFile().getRelease().getTitle();
+        Boolean canSkip = mFeedAudioPlayer.canSkip();
+        Integer duration = (int) play.getAudioFile().getDurationInSeconds();
 
+        String response = String.format("{metadata: %s, id: %s, title: %s, artist: %s, album: %s, canSkip: %s, duration: %d}", options, id, title, artist, album, canSkip, duration);
+
+        sendCordovaCallback(response, true);
     }
 
     @Override
@@ -169,26 +158,40 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
 
     @Override
     public void onStationChanged(Station station) {
-//        callbackContext.success(message);
-//        WritableMap params = Arguments.createMap();
-//        params.putInt("activeStationId", station.getId());
-//        sendEvent(reactContext, "station-change", params);
+        String response = String.format("{activeStationId: %d}", station.getId());
+        sendCordovaCallback(response, true);
     }
 
     // Skip
     @Override
     public void requestCompleted(boolean b) {
-//        if(!b) {
-//            WritableMap params = Arguments.createMap();
-//            sendEvent(reactContext, "skip-failed", params);
-//        }
+        if (!b) {
+            String response = String.format("{%s}", true);
+            sendCordovaCallback(response, true);
+        }
     }
 
+    // helper method
+    private void sendCordovaCallback(String response, Boolean isSuccessful) {
+        PluginResult result;
+
+        if (isSuccessful) {
+            result = new PluginResult(PluginResult.Status.OK, response);
+        } else {
+            result = new PluginResult(PluginResult.Status.ERROR, response);
+        }
+
+        result.setKeepCallback(true);
+        cordovaCallback.sendPluginResult(result);
+    }
+
+    // helper method
     private static Gson createDefaultGson() {
         GsonBuilder builder = new GsonBuilder();
         return builder.create();
     }
 
+    // helper method
     private String toJson(Object json) {
         return createDefaultGson().toJson(json);
     }
