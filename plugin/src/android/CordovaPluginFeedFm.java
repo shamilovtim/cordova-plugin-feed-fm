@@ -9,24 +9,32 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
-public class CordovaPluginFeedFm extends CordovaPlugin {
+import fm.feed.android.playersdk.FeedAudioPlayer;
+import fm.feed.android.playersdk.FeedPlayerService;
+import fm.feed.android.playersdk.models.Play;
+import fm.feed.android.playersdk.models.Station;
 
-@Override
-public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-    if (action.equals("echo")) {
-        Log.i("CordovaPluginFeedFm", "Native echo call");
-        String message = args.getString(0);
-        this.echo(message, callbackContext);
-        return true;
-    }
-    return false;
-}
+public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlayer.StateListener,
+        FeedAudioPlayer.StationChangedListener, FeedAudioPlayer.PlayListener, FeedAudioPlayer.SkipListener {
 
-private void echo(String message, CallbackContext callbackContext) {
-    if (message != null && message.length() > 0) {
-        callbackContext.success(message);
-    } else {
-        callbackContext.error("Expected one non-empty string argument.");
+    private FeedAudioPlayer mFeedAudioPlayer;
+
+    @Override
+    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+        if (action.equals("echo")) {
+            Log.i("CordovaPluginFeedFm", "Native echo call");
+            String message = args.getString(0);
+            this.echo(message, callbackContext);
+            return true;
+        }
+        return false;
     }
-}
+
+    private void echo(String message, CallbackContext callbackContext) {
+        if (message != null && message.length() > 0) {
+            callbackContext.success(message);
+        } else {
+            callbackContext.error("Expected one non-empty string argument.");
+        }
+    }
 }
