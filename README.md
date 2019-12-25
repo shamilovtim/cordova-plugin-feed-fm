@@ -14,7 +14,10 @@
   <h4 align="center">By: Timothy Shamilov</h4>
 
   <p align="center">
-    Uses the FeedMedia CocoaPod on iOS
+    Uses the FeedMedia CocoaPod on iOS and Feed Gradle package
+  </p>
+    <p align="center">
+    Objective-C & Java
   </p>
 </p>
 
