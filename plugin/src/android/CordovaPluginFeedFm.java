@@ -58,6 +58,22 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
             this.stop();
             return true;
         }
+        if (action.equals("createNewClientID")) {
+            Log.i("CordovaPluginFeedFm", "Native createNewClientID call");
+            this.createNewClientID();
+            return true;
+        }
+        if (action.equals("requestClientID")) {
+            Log.i("CordovaPluginFeedFm", "Native requestClientID call");
+            this.requestClientID();
+            return true;
+        }
+        if (action.equals("setClientID")) {
+            Log.i("CordovaPluginFeedFm", "Native requestClientID call");
+            String passedID = args.getString(0);
+            this.setClientID(passedID);
+            return true;
+        }
         if (action.equals("initializeWithToken")) {
             Log.i("CordovaPluginFeedFm", "Native initializeWithToken call");
             String token = args.getString(0);
@@ -138,6 +154,32 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
         mFeedAudioPlayer.addSkipListener(CordovaPluginFeedFm.this);
         mFeedAudioPlayer.addStationChangedListener(CordovaPluginFeedFm.this);
         mFeedAudioPlayer.addStateListener(CordovaPluginFeedFm.this);
+    }
+
+    public void setClientID(String clientID) {
+        mFeedAudioPlayer.setClientId(clientID);
+    }
+
+    public void requestClientID() {
+        String clientId = mFeedAudioPlayer.getClientId();
+        String response = String.format("{ClientID: %s}", clientId);
+        sendCordovaCallback(response, true);
+    }
+
+    public void createNewClientID() {
+        mFeedAudioPlayer.createNewClientId(new FeedAudioPlayer.ClientIdListener() {
+            @Override
+            public void onClientId(String s) {
+                String response = String.format("{ClientID: %s}", s);
+                sendCordovaCallback(response, true);
+            }
+
+            @Override
+            public void onError() {
+                Log.e("CordovaPluginFeedFm", "Error while generating a new client id");
+                sendCordovaCallback("Error while generating a new client id", false);
+            }
+        });
     }
 
     @Override
