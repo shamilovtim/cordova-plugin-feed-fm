@@ -23,4 +23,5 @@ Icon
 /platforms
 example/node_modules/
 example/platforms/
+example/plugins/
 .vscode/settings.json
