@@ -75,7 +75,8 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
                 try {
                     Integer activeStationId = mFeedAudioPlayer.getActiveStation().getId();
                     Boolean isOffline = !mFeedAudioPlayer.getActiveStation().isTypeOffline();
-                    String response = String.format("{activeStationId: %d, available: %s, stations: %s}", activeStationId, isOffline, mFeedAudioPlayer.getStationList());
+                    String stations = mFeedAudioPlayer.getStationList().toString();
+                    String response = String.format("{activeStationId: %d, available: %s, stations: %s}", activeStationId, isOffline, stations);
                     callbackContext.success(response);
                 } catch (Exception e) {
                     e.printStackTrace();
