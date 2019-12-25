@@ -75,7 +75,7 @@ The plugin development env features automatic compilation. To use run `gulp` in 
 This watches two locations:
 
 - in /example/ it watches html, css, js. on change it compiles that code.
-- in /plugin/ it watches js, xml, h, m, kt, swift, json. on change it removes and adds back the plugin.
+- in /plugin/ it watches js, xml, h, m, a, kt, swift, json. on change it removes and adds back the plugin.
 
 ## Key Commands
 
