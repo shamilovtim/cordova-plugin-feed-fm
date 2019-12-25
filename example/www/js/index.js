@@ -35,6 +35,10 @@ var app = {
     // listen for setVolume button
     var setVolume = document.getElementById("setVolume");
     setVolume.addEventListener("click", app.setVolume, false);
+
+    // listen for echo button
+    var echo = document.getElementById("echo");
+    echo.addEventListener("click", app.echo, false);
   },
 
   onDeviceReady: function() {
@@ -89,6 +93,21 @@ var app = {
       "cc1783f3b77faefebc3b4065665cf316f1bc34d2",
       "711ac508971f37972eeef5a153239587812fc7dd",
       false
+    );
+  },
+  echo: function() {
+    console.log("echo method called");
+    CordovaPluginFeedFm.echo(
+      function(msg) {
+        console.log("echo success", msg);
+        logger().log(JSON.stringify(msg, null, 4));
+        logger().log("echo success returned::");
+      },
+      function(err) {
+        console.log("echo fail ", err);
+        logger().log("echo fail " + JSON.stringify(err), "e");
+      },
+      "simple echo"
     );
   },
   play: function() {
