@@ -10,13 +10,13 @@
 {
     CDVPluginResult* pluginResult = nil;
     NSString* echo = [command.arguments objectAtIndex:0];
-
+    
     if (echo != nil && [echo length] > 0) {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:echo];
     } else {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Arg was null"];
     }
-
+    
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
@@ -61,7 +61,7 @@
 {
     FMAudioPlayer *player = [FMAudioPlayer sharedPlayer];
     NSString *str = [player getClientId];
-
+    
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"ClientID":str}];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -85,21 +85,21 @@
     CDVPluginResult* pluginResult = nil;
     NSString* id = [command.arguments objectAtIndex:0];
     NSLog(@"native setActiveStation method called");
-
+    
     NSString *errorMessage = [NSString stringWithFormat:@"Cannot set active station to %@ because no station found with that id", id];
-
+    
     NSUInteger index = [_player.stationList indexOfObjectPassingTest:^BOOL(FMStation *station, NSUInteger idx, BOOL * _Nonnull stop) {
         NSLog(@"checked for station.identifier %@ and id %@", station.identifier, id);
         return [station.identifier isEqualToString:id];
     }];
-
+    
     NSLog(@"cannot set thing with id, %@ and index %lu", id, index);
     if (index == NSNotFound) {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:errorMessage];
         NSLog(@"cannot set thing with id, %@ and index %lu", id, index);
         return;
     }
-
+    
     _player.activeStation = _player.stationList[index];
     NSLog(@"did set thing with id, %@ and index %lu", id, index);
 }
@@ -111,17 +111,17 @@
     
     FMLogSetLevel(FMLogLevelDebug);
     NSLog(@"native initializeWithToken called");
-
+    
     _player = FMAudioPlayer.sharedPlayer;
     _player.disableSongStartNotifications = YES;
-
+    
     [FMAudioPlayer setClientToken:token secret:secret];
-
+    
     FMAudioPlayer.sharedPlayer.doesHandleRemoteCommands = enableBackgroundMusic;
-
+    
     [FMAudioPlayer.sharedPlayer whenAvailable:^{
         CDVPluginResult* pluginResult = nil;
-
+        
         // the active station is not set at this time, so assume it is the first station
         FMStation *station = [self->_player.stationList firstObject];
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{
@@ -129,18 +129,18 @@
             @"stations": [self mapStationListToDictionary:self->_player.stationList],
             @"activeStationId": station.identifier
         }];
-
+        
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     } notAvailable:^{
         CDVPluginResult* pluginResult = nil;
-
+        
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{
             @"available": @NO
         }];
-
+        
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }];
-
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(onNewClientIDGenerated:) name:FMAudioPlayerNewClientIdAvailable object:_player];
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -156,7 +156,7 @@
 - (void) onNewClientIDGenerated: (NSNotification*)notification  {
     NSString *str = [notification.userInfo valueForKey:@"client_id"];
     CDVPluginResult* pluginResult = nil;
-
+    
     if(str != nil){
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"ClientID":str}];
         [pluginResult setKeepCallbackAsBool:true];
@@ -166,7 +166,7 @@
 
 - (void) onSkipFailedNotification: (NSNotification *)notification {
     CDVPluginResult* pluginResult = nil;
-
+    
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"skip failed"];
     [pluginResult setKeepCallbackAsBool:true];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
@@ -174,7 +174,7 @@
 
 - (void) onActiveStationDidChangeNotification: (NSNotification *)notification {
     CDVPluginResult* pluginResult = nil;
-
+    
     // @"station-change"
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{
         @"activeStationId": _player.activeStation.identifier }];
@@ -184,13 +184,13 @@
 
 - (void) onPlaybackStateDidChangeNotification: (NSNotification *)notification {
     FMAudioPlayerPlaybackState state =_player.playbackState;
-
+    
     // this might cause a notice when the state doesn't actually change, but I think
     // it's worth it to weed this state out
     if (state == FMAudioPlayerPlaybackStateComplete) {
         state = FMAudioPlayerPlaybackStateReadyToPlay;
     }
-
+    
     CDVPluginResult* pluginResult = nil;
     // @"state-change"
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{
@@ -199,9 +199,9 @@
 
 - (void) onCurrentItemDidBeginPlaybackNotification: (NSNotification *)notification {
     FMAudioItem *current = _player.currentItem;
-
+    
     long duration = lroundf(_player.currentItemDuration);
-
+    
     CDVPluginResult* pluginResult = nil;
     // @"play-started"
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{
@@ -222,7 +222,7 @@
 // helper
 - (NSArray<NSDictionary *> *) mapStationListToDictionary: (FMStationArray *) inStations {
     NSMutableArray<NSDictionary *> *outStations = [[NSMutableArray alloc] init];
-
+    
     for (FMStation *station in inStations) {
         [outStations addObject:@{
             @"id": station.identifier,
@@ -230,7 +230,7 @@
             @"options": station.options
         }];
     }
-
+    
     return outStations;
 }
 @end
