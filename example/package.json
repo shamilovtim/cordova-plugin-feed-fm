@@ -4,42 +4,20 @@
   "version": "1.0.0",
   "description": "A sample Apache Cordova application that responds to the deviceready event.",
   "main": "index.js",
-  "scripts": {
-    "watch": "npm-watch",
-    "prepare": "cordova prepare",
-    "build_plugin": "cordova plugin rm cordova-plugin-feed-fm && cordova plugin add --link ../plugin"
-  },
   "keywords": [
     "ecosystem:cordova"
   ],
   "author": "Apache Cordova Team",
   "license": "Apache-2.0",
-  "watch": {
-    "prepare": {
-      "patterns": [
-        "www",
-        "plugins",
-        "hooks"
-      ],
-      "extensions": "js,html,css,xml,jpeg,jpg,png",
-      "quiet": false
-    },
-    "build_plugin": {
-      "patterns": [
-        "../plugin"
-      ],
-      "extensions": "js,xml,json",
-      "quiet": false,
-      "runOnChangeOnly": true
-    }
-  },
   "dependencies": {
     "CordovaPluginFeedFm": "file:../plugin",
     "cordova-android": "^8.1.0",
     "cordova-ios": "^5.1.1"
   },
   "devDependencies": {
-    "npm-watch": "^0.6.0"
+    "grunt": "^1.0.4",
+    "grunt-contrib-watch": "^1.1.0",
+    "gulp": "^4.0.2"
   },
   "cordova": {
     "plugins": {
