@@ -72,18 +72,11 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
         FeedAudioPlayer.AvailabilityListener listener = new FeedAudioPlayer.AvailabilityListener() {
             @Override
             public void onPlayerAvailable(FeedAudioPlayer feedAudioPlayer) {
-//                WritableMap params = Arguments.createMap();
-//                callbackContext.success("available:true");
-//                callbackContext.success("available:true");
-                String strStations = toJson(mFeedAudioPlayer.getStationList());
-
                 try {
-//                    JSONArray jsArray = new JSONArray(strStations);
-//                    WritableArray wArray = convertJsonToArray(jsArray);
-//                    params.putArray("stations", wArray);
-//                    params.putInt("activeStationId", mFeedAudioPlayer.getActiveStation().getId());
-//                    sendEvent(reactContext, "availability", params);
-                    callbackContext.success(strStations);
+                    Integer activeStationId = mFeedAudioPlayer.getActiveStation().getId();
+                    Boolean isOffline = !mFeedAudioPlayer.getActiveStation().isTypeOffline();
+                    String response = String.format("{activeStationId: %d, available: %s, stations: %s}", activeStationId, isOffline, mFeedAudioPlayer.getStationList());
+                    callbackContext.success(response);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
