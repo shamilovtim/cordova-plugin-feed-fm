@@ -18,15 +18,6 @@
   </p>
 </p>
 
-# Prerequisites
-
-- Cordova-iOS 5.x.x or higher
-- Cordova-Android 8.x.x or higher
-
-### To do, future enhancements:
-
-- Add ionic native wrapper
-
 # Directory Structure
 
 ```sh
@@ -35,7 +26,14 @@
 ├── plugin        # plugin source
 ```
 
-## Usage
+# Usage
+
+## Prerequisites
+
+- Cordova-iOS 5.x.x or higher
+- Cordova-Android 8.x.x or higher
+
+## Library
 
 initialize the plugin
 
@@ -53,7 +51,7 @@ CordovaPluginFeedFm.setActiveStation(success: Function, error: Function, station
 {activeStationId: "175691", available: true, stations: [{id: "175691", name: "Top40", options: {}}, {id: "175692", name: "Electronic", options: {}}, {id: "175693", name: "Hip Hop", options: {}}, …]}
 ```
 
-# Plugin Development
+# Development
 
 The dev environment used for this project was macOS. Instructions for any other OS aren't provided and will be unreliable.
 
@@ -65,21 +63,19 @@ You will need the following global dependencies:
 
 ## Setting up local env
 
-1. terminal window 1: `cd example`
-2. terminal window 1: `cordova platform add <yourplatform>`
-3. terminal window 1: `gulp`
-4. new terminal window 2: `cordova emulate <yourplatform>`
+1. `cd example`
+2. `cordova platform add platformname`
+3. `gulp`
+4. `cordova emulate platformname`
 
 ## Local workflow
-
-Edit iOS native code in xCode and Android native code in Android Studio.
 
 The plugin development env features automatic compilation. To use run `gulp` in /example/.
 
 This watches two locations:
 
-- in /example/ it watches html, css, js. upon updates it compiles that code.
-- in /plugin/ it watches js, xml, h, m, kt, swift, json. any changes and it remvoes and adds back the plugin.
+- in /example/ it watches html, css, js. on change it compiles that code.
+- in /plugin/ it watches js, xml, h, m, kt, swift, json. on change it removes and adds back the plugin.
 
 ## Key Commands
 
