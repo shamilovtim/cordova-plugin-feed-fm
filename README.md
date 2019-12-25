@@ -61,34 +61,29 @@ You will need the following global dependencies:
 
 - npm
 - cordova
+- gulp-cli
 
 ## Setting up local env
 
 1. terminal window 1: `cd example`
 2. terminal window 1: `cordova platform add <yourplatform>`
-3. terminal window 1: `npm run watch &`
+3. terminal window 1: `gulp`
 4. new terminal window 2: `cordova emulate <yourplatform>`
 
 ## Local workflow
 
-The plugin in `../example` is symlinked to `../plugin`. That means all changes in the .h and .m files in the former will appear in the latter and vice versa.
+Edit iOS native code in xCode and Android native code in Android Studio.
 
-Work on iOS native code in xCode and Android native code in Android Studio.
-
-The plugin development env features automatic compilation. To use:
-
-```shell
-npm run watch &
-```
+The plugin development env features automatic compilation. To use run `gulp` in /example/.
 
 This watches two locations:
 
-- in ../example/ it watches html, css, js and assets. upon updates it compiles that code.
-- in ../plugin/ it watches js, xml and json. upon updates it re-adds the plugin.
+- in /example/ it watches html, css, js. upon updates it compiles that code.
+- in /plugin/ it watches js, xml, h, m, kt, swift, json. any changes and it remvoes and adds back the plugin.
 
 ## Key Commands
 
-- `npm run watch &` in ../example/ persistently runs nodemon to watch for changes
+- `gulp` in ../example/ runs gulp to watch for changes
 - `cordova prepare` in ../example/ this compiles non-native assets (html/css/js)
 - `cordova plugin rm cordova-plugin-feed-fm && cordova plugin add --link ../plugin` in ../example/ reinstall plugin, useful for js changes
 
