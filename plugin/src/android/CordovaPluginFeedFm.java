@@ -2,6 +2,7 @@ package shamilovtim;
 
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
+import org.apache.cordova.PluginResult;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -9,18 +10,26 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import fm.feed.android.playersdk.FeedAudioPlayer;
 import fm.feed.android.playersdk.FeedPlayerService;
 import fm.feed.android.playersdk.models.Play;
 import fm.feed.android.playersdk.models.Station;
 
+import android.content.Context;
+
 public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlayer.StateListener,
         FeedAudioPlayer.StationChangedListener, FeedAudioPlayer.PlayListener, FeedAudioPlayer.SkipListener {
 
     private FeedAudioPlayer mFeedAudioPlayer;
+    private Context applicationContext;
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+        applicationContext = this.cordova.getActivity().getApplicationContext();
+
         if (action.equals("echo")) {
             Log.i("CordovaPluginFeedFm", "Native echo call");
             String message = args.getString(0);
@@ -32,19 +41,81 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
             this.play();
             return true;
         }
+        if (action.equals("initializeWithToken")) {
+            Log.i("CordovaPluginFeedFm", "Native initializeWithToken call");
+            String token = args.getString(0);
+            String secret = args.getString(1);
+            Boolean backgroundAudio = args.getBoolean(2);
+            this.initializeWithToken(callbackContext, token, secret, backgroundAudio);
+            return true;
+        }
         return false;
     }
 
     private void echo(String message, CallbackContext callbackContext) {
+        PluginResult result = new PluginResult(PluginResult.Status.OK, message);
+        result.setKeepCallback(true);
+
         if (message != null && message.length() > 0) {
-            callbackContext.success(message);
+            callbackContext.sendPluginResult(result);
         } else {
-            callbackContext.error("Expected one non-empty string argument.");
+            callbackContext.error("Expected a string argument.");
         }
     }
 
     public void play() {
         mFeedAudioPlayer.play();
+    }
+
+    public void initializeWithToken(CallbackContext callbackContext, String token, String secret, boolean enableBackgroundMusic) {
+
+        FeedAudioPlayer.AvailabilityListener listener = new FeedAudioPlayer.AvailabilityListener() {
+            @Override
+            public void onPlayerAvailable(FeedAudioPlayer feedAudioPlayer) {
+//                WritableMap params = Arguments.createMap();
+//                callbackContext.success("available:true");
+//                callbackContext.success("available:true");
+                String strStations = toJson(mFeedAudioPlayer.getStationList());
+
+                try {
+//                    JSONArray jsArray = new JSONArray(strStations);
+//                    WritableArray wArray = convertJsonToArray(jsArray);
+//                    params.putArray("stations", wArray);
+//                    params.putInt("activeStationId", mFeedAudioPlayer.getActiveStation().getId());
+//                    sendEvent(reactContext, "availability", params);
+                    callbackContext.success(strStations);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onPlayerUnavailable(Exception e) {
+//                WritableMap params = Arguments.createMap();
+//                params.putBoolean("available", false);
+//                sendEvent(reactContext, "availability", params);
+            }
+        };
+
+        if (enableBackgroundMusic) {
+            FeedPlayerService.initialize(applicationContext, token, secret);
+
+            mFeedAudioPlayer = FeedPlayerService.getInstance();
+            FeedPlayerService.getInstance(listener);
+
+        } else {
+            mFeedAudioPlayer = new FeedAudioPlayer.Builder()
+                    .setToken(token)
+                    .setSecret(secret)
+                    .setContext(applicationContext)
+                    .setAvailabilityListener(listener)
+                    .build();
+        }
+
+        mFeedAudioPlayer.addPlayListener(CordovaPluginFeedFm.this);
+        mFeedAudioPlayer.addSkipListener(CordovaPluginFeedFm.this);
+        mFeedAudioPlayer.addStationChangedListener(CordovaPluginFeedFm.this);
+        mFeedAudioPlayer.addStateListener(CordovaPluginFeedFm.this);
     }
 
     @Override
@@ -119,5 +190,13 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
 //        }
     }
 
+    private static Gson createDefaultGson() {
+        GsonBuilder builder = new GsonBuilder();
+        return builder.create();
+    }
+
+    private String toJson(Object json) {
+        return createDefaultGson().toJson(json);
+    }
 
 }
