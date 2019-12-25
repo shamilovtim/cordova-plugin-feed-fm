@@ -26,4 +26,13 @@
             </pods>
         </podspec>
     </platform>
+    <platform name="android">
+        <config-file target="config.xml" parent="/*">
+            <feature name="CordovaPluginFeedFm">
+                <param name="android-package" value="shamilovtim.CordovaPluginFeedFm" />
+            </feature>
+        </config-file>
+        <framework src="fm.feed.android:player-sdk-exo290:5.3.2" />
+        <source-file src="src/android/CordovaPluginFeedFm.java" target-dir="src/shamilovtim" />
+    </platform>
 </plugin>
