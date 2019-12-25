@@ -43,6 +43,21 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
             this.play();
             return true;
         }
+        if (action.equals("pause")) {
+            Log.i("CordovaPluginFeedFm", "Native pause call");
+            this.pause();
+            return true;
+        }
+        if (action.equals("skip")) {
+            Log.i("CordovaPluginFeedFm", "Native skip call");
+            this.skip();
+            return true;
+        }
+        if (action.equals("stop")) {
+            Log.i("CordovaPluginFeedFm", "Native stop call");
+            this.stop();
+            return true;
+        }
         if (action.equals("initializeWithToken")) {
             Log.i("CordovaPluginFeedFm", "Native initializeWithToken call");
             String token = args.getString(0);
@@ -65,8 +80,20 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
         }
     }
 
-    public void play() {
+    private void play() {
         mFeedAudioPlayer.play();
+    }
+
+    private void pause() {
+        mFeedAudioPlayer.pause();
+    }
+
+    private void skip() {
+        mFeedAudioPlayer.skip();
+    }
+
+    private void stop() {
+        mFeedAudioPlayer.stop();
     }
 
     public void initializeWithToken(CallbackContext callbackContext, String token, String secret, boolean enableBackgroundMusic) {
@@ -140,20 +167,32 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
 
     @Override
     public void onStateChanged(FeedAudioPlayer.State state) {
-//        WritableMap params = Arguments.createMap();
-//        switch (state)
-//        {
-//            case PAUSED:                 params.putInt("state",FeedAudioPlayer.State.PAUSED.ordinal()); break;
-//            case PLAYING:                params.putInt("state",FeedAudioPlayer.State.PLAYING.ordinal()); break;
-//            case STALLED:                params.putInt("state",FeedAudioPlayer.State.STALLED.ordinal()); break;
-//            case UNAVAILABLE:            params.putInt("state",FeedAudioPlayer.State.UNAVAILABLE.ordinal()); break;
-//            case READY_TO_PLAY:          params.putInt("state",FeedAudioPlayer.State.READY_TO_PLAY.ordinal()); break;
-//            case UNINITIALIZED:          params.putInt("state",FeedAudioPlayer.State.UNINITIALIZED.ordinal()); break;
-//            case WAITING_FOR_ITEM:       params.putInt("state",FeedAudioPlayer.State.WAITING_FOR_ITEM.ordinal()); break;
-//            case AVAILABLE_OFFLINE_ONLY: params.putInt("state",FeedAudioPlayer.State.AVAILABLE_OFFLINE_ONLY.ordinal()); break;
+//        switch (state) {
+//            case PAUSED:
+//                sendCordovaCallback("paused", true);
+//                break;
+//            case PLAYING:
+//                sendCordovaCallback("playing", true);
+//                break;
+//            case STALLED:
+//                sendCordovaCallback("stalled", true);
+//                break;
+//            case UNAVAILABLE:
+//                sendCordovaCallback("unavailable", true);
+//                break;
+//            case READY_TO_PLAY:
+//                sendCordovaCallback("ready to play", true);
+//                break;
+//            case UNINITIALIZED:
+//                sendCordovaCallback("uninitialized", true);
+//                break;
+//            case WAITING_FOR_ITEM:
+//                sendCordovaCallback("waiting_for_item", true);
+//                break;
+//            case AVAILABLE_OFFLINE_ONLY:
+//                sendCordovaCallback("available_offline_only", true);
+//                break;
 //        }
-//
-//        sendEvent(reactContext, "state-change", params);
     }
 
     @Override
@@ -166,8 +205,7 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
     @Override
     public void requestCompleted(boolean b) {
         if (!b) {
-            String response = String.format("{%s}", true);
-            sendCordovaCallback(response, true);
+            sendCordovaCallback("out of skips", false);
         }
     }
 
