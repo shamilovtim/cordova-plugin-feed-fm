@@ -1,12 +1,156 @@
 var app = {
-  // Application Constructor
-  initialize: function() {
+  init: function() {
     logger().log("App initialized");
     app.setupListeners();
-
-    document.addEventListener("deviceready", this.onDeviceReady.bind(this), false);
   },
-
+  initializeWithToken: function() {
+    console.log("initializeWithToken method called");
+    CordovaPluginFeedFm.initializeWithToken(
+      function(msg) {
+        switch (msg.type) {
+          case "REQUESTING_SKIP":
+            logger().log("did reach case REQUESTING_SKIP");
+            logger().log(JSON.stringify(msg.payload, null, 4));
+            break;
+          case "PLAYBACK_STARTED":
+            logger().log("did reach case PLAYBACK_STARTED");
+            logger().log(JSON.stringify(msg.payload, null, 4));
+            break;
+          case "PLAYBACK_STARTED":
+            logger().log("did reach case PLAYBACK_STARTED");
+            logger().log(JSON.stringify(msg.payload, null, 4));
+            break;
+          case "NEW_CLIENT_ID":
+            logger().log("did reach case NEW_CLIENT_ID");
+            logger().log(JSON.stringify(msg.payload, null, 4));
+            break;
+          case "SET_ACTIVE_STATION_SUCCESS":
+            logger().log("did reach case SET_ACTIVE_STATION_SUCCESS");
+            logger().log(JSON.stringify(msg.payload, null, 4));
+            break;
+          case "SET_ACTIVE_STATION_FAIL":
+            logger().log("did reach case SET_ACTIVE_STATION_FAIL");
+            logger().log(JSON.stringify(msg.payload, null, 4));
+            break;
+          case "REQUEST_CLIENT_ID":
+            logger().log("did reach case REQUEST_CLIENT_ID");
+            logger().log(JSON.stringify(msg.payload, null, 4));
+            break;
+          case "SKIP_FAIL":
+            logger().log("did reach case SKIP_FAIL");
+            logger().log(JSON.stringify(msg.payload, null, 4));
+            break;
+          case "INITIALIZE":
+            logger().log("did reach case INITIALIZE");
+            logger().log(JSON.stringify(msg.payload, null, 4));
+            break;
+          case "WAITING_FOR_ITEM":
+            logger().log("did reach case WAITING_FOR_ITEM");
+            logger().log(JSON.stringify(msg.payload, null, 4));
+            break;
+          case "READY_TO_PLAY":
+            logger().log("did reach case READY_TO_PLAY");
+            logger().log(JSON.stringify(msg.payload, null, 4));
+            break;
+          case "PLAYING":
+            logger().log("did reach case PLAYING");
+            logger().log(JSON.stringify(msg.payload, null, 4));
+            break;
+          case "STALLED":
+            logger().log("did reach case STALLED");
+            logger().log(JSON.stringify(msg.payload, null, 4));
+            break;
+          case "COMPLETE":
+            logger().log("did reach case COMPLETE");
+            logger().log(JSON.stringify(msg.payload, null, 4));
+            break;
+          case "UNKNOWN":
+            logger().log("did reach case UNKNOWN");
+            logger().log(JSON.stringify(msg.payload, null, 4));
+            break;
+          case "OFFLINE_ONLY":
+            logger().log("did reach case OFFLINE_ONLY");
+            logger().log(JSON.stringify(msg.payload, null, 4));
+            break;
+          case "UNINITIALIZED":
+            logger().log("did reach case UNINITIALIZED");
+            logger().log(JSON.stringify(msg.payload, null, 4));
+            break;
+          case "UNAVAILABLE":
+            logger().log("did reach case UNAVAILABLE");
+            logger().log(JSON.stringify(msg.payload, null, 4));
+            break;
+          case "STATION_CHANGE":
+            logger().log("did reach case STATION_CHANGE");
+            logger().log(JSON.stringify(msg.payload, null, 4));
+            break;
+          case "READY_TO_PLAY":
+            logger().log("did reach case READY_TO_PLAY");
+            logger().log(JSON.stringify(msg.payload, null, 4));
+            break;
+          case "PAUSED":
+            logger().log("did reach case PAUSED");
+            logger().log(JSON.stringify(msg.payload, null, 4));
+            break;
+          default:
+            break;
+        }
+      },
+      function(err) {},
+      "cc1783f3b77faefebc3b4065665cf316f1bc34d2",
+      "711ac508971f37972eeef5a153239587812fc7dd",
+      false
+    );
+  },
+  echo: function() {
+    console.log("echo method called");
+    CordovaPluginFeedFm.echo(
+      function(success) {
+        console.log("echo success", success);
+        logger().log(JSON.stringify(success, null, 4));
+        logger().log("echo success returned::");
+      },
+      function(err) {
+        console.log("echo fail ", err);
+        logger().log("echo fail " + JSON.stringify(err), "e");
+      },
+      "simple echo"
+    );
+  },
+  play: function() {
+    console.log("play method called");
+    CordovaPluginFeedFm.play();
+  },
+  pause: function() {
+    console.log("pause method called");
+    CordovaPluginFeedFm.pause();
+  },
+  skip: function() {
+    console.log("skip method called");
+    CordovaPluginFeedFm.skip();
+  },
+  stop: function() {
+    console.log("stop method called");
+    CordovaPluginFeedFm.stop();
+  },
+  requestClientId: function() {
+    console.log("requestClientId method called");
+    CordovaPluginFeedFm.requestClientId(
+      function(success) {
+        logger().log(JSON.stringify(success, null, 4));
+        logger().log("requestClientId success returned:");
+      },
+      function(error) {}
+    );
+  },
+  setVolume: function() {
+    console.log("setVolume method called");
+    CordovaPluginFeedFm.setVolume(5);
+  },
+  setActiveStation: function() {
+    console.log("setActiveStation method called");
+    CordovaPluginFeedFm.setActiveStation("175692");
+  },
   setupListeners: function() {
     // listen for initializeWithToken button
     var initializeWithToken = document.getElementById("initializeWithToken");
@@ -39,167 +183,11 @@ var app = {
     // listen for echo button
     var echo = document.getElementById("echo");
     echo.addEventListener("click", app.echo, false);
-  },
 
-  onDeviceReady: function() {
-    app.receivedEvent("deviceready");
-
-    // using native code, fire the echo function
-    CordovaPluginFeedFm.echo(
-      "FeedFM native echo function working!",
-      function(msg) {
-        document.getElementById("deviceready").querySelector(".received").innerHTML = msg;
-      },
-      function(err) {
-        document.getElementById("deviceready").innerHTML = '<p class="event received">' + err + "</p>";
-      }
-    );
-
-    // using js only code, fire the echojs function
-    CordovaPluginFeedFm.echojs(
-      "FeedFM js only echojs function working",
-      function(msg) {
-        document.getElementsByTagName("h1")[0].innerHTML = msg;
-      },
-      function(err) {
-        document.getElementsByTagName("h1")[0].innerHTML = err;
-      }
-    );
-  },
-
-  // Update DOM on a Received Event
-  receivedEvent: function(id) {
-    var parentElement = document.getElementById(id);
-    var listeningElement = parentElement.querySelector(".listening");
-    var receivedElement = parentElement.querySelector(".received");
-
-    listeningElement.setAttribute("style", "display:none;");
-    receivedElement.setAttribute("style", "display:block;");
-
-    console.log("Received Event: " + id);
-  },
-  initializeWithToken: function() {
-    console.log("initializeWithToken method called");
-    CordovaPluginFeedFm.initializeWithToken(
-      function(msg) {
-        console.log("initializeWithToken success returned:", msg);
-        logger().log(JSON.stringify(msg, null, 4));
-        logger().log("initializeWithToken success returned:");
-      },
-      function(err) {
-        console.log("initializeWithToken fail ", err);
-        logger().log("initializeWithToken fail " + JSON.stringify(err), "e");
-      },
-      "cc1783f3b77faefebc3b4065665cf316f1bc34d2",
-      "711ac508971f37972eeef5a153239587812fc7dd",
-      false
-    );
-  },
-  echo: function() {
-    console.log("echo method called");
-    CordovaPluginFeedFm.echo(
-      function(msg) {
-        console.log("echo success", msg);
-        logger().log(JSON.stringify(msg, null, 4));
-        logger().log("echo success returned::");
-      },
-      function(err) {
-        console.log("echo fail ", err);
-        logger().log("echo fail " + JSON.stringify(err), "e");
-      },
-      "simple echo"
-    );
-  },
-  play: function() {
-    console.log("play method called");
-    CordovaPluginFeedFm.play(
-      function(msg) {
-        console.log("play success", msg);
-        logger().log(JSON.stringify(msg, null, 4));
-        logger().log("play success returned::");
-      },
-      function(err) {
-        console.log("play fail ", err);
-        logger().log("play fail " + JSON.stringify(err), "e");
-      },
-      "FeedFM play function"
-    );
-  },
-  pause: function() {
-    console.log("pause method called");
-    CordovaPluginFeedFm.pause(
-      function(msg) {
-        console.log("pause success ", msg);
-        logger().log(JSON.stringify(msg, null, 4));
-        logger().log("pause success returned:");
-      },
-      function(err) {
-        console.log("pause fail ", err);
-        logger().log("pause fail " + JSON.stringify(err), "e");
-      },
-      "FeedFM pause function"
-    );
-  },
-  skip: function() {
-    console.log("skip method called");
-    CordovaPluginFeedFm.skip(
-      function(msg) {
-        console.log("skip success ", msg);
-        logger().log(JSON.stringify(msg, null, 4));
-        logger().log("skip success returned::");
-      },
-      function(err) {
-        console.log("skip function fail ", err);
-        logger().log("pause fail " + JSON.stringify(err), "e");
-      },
-      "FeedFM skip function "
-    );
-  },
-  stop: function() {
-    console.log("stop method called");
-    CordovaPluginFeedFm.stop(
-      function(msg) {
-        console.log("stop success ", msg);
-        logger().log(JSON.stringify(msg, null, 4));
-        logger().log("stop success returned:");
-      },
-      function(err) {
-        console.log("stop fail ", err);
-        logger().log("stop fail " + JSON.stringify(err), "e");
-      },
-      "FeedFM stop function "
-    );
-  },
-  setVolume: function() {
-    console.log("setVolume method called");
-    CordovaPluginFeedFm.setVolume(
-      function(msg) {
-        console.log("setVolume success ", msg);
-        logger().log(JSON.stringify(msg, null, 4));
-        logger().log("setVolume success returned:");
-      },
-      function(err) {
-        console.log("setVolume fail ", err);
-        logger().log("setVolume fail " + JSON.stringify(err), "e");
-      },
-      5
-    );
-  },
-  setActiveStation: function() {
-    console.log("setActiveStation method called");
-    CordovaPluginFeedFm.setActiveStation(
-      function(msg) {
-        console.log("setActiveStation success ", msg);
-        logger().log(JSON.stringify(msg, null, 4));
-        logger().log("setActiveStation success returned:");
-      },
-      function(err) {
-        console.log("setActiveStation fail ", err);
-        logger().log("setActiveStation fail " + JSON.stringify(err), "e");
-      },
-      "175692"
-    );
+    // listen for echo button
+    var requestClientId = document.getElementById("requestClientId");
+    requestClientId.addEventListener("click", app.requestClientId, false);
   }
 };
 
-app.initialize();
+app.init();
