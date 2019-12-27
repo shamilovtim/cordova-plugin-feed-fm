@@ -19,22 +19,14 @@
   </p>
 </p>
 
-# Directory Structure
-
-```sh
-.
-├── example       # cordova example project
-├── plugin        # plugin source
-```
-
 # Usage
 
-## Prerequisites
+### Prerequisites
 
 - Cordova-iOS 5.x.x or higher
 - Cordova-Android 8.x.x or higher
 
-## Library
+### Library
 
 initialize the plugin and handle all future state with a switch statement.
 plugin will respond with the appropriate `msg.type` and `msg.payload` when native state changes.
@@ -214,13 +206,21 @@ You will need the following global dependencies:
 - cordova
 - gulp-cli
 
-## Setting up local env
+### Directory Structure
+
+```sh
+.
+├── example       # cordova example project
+├── plugin        # plugin source
+```
+
+### Setting up local env
 
 1. `cd example`
 2. `cordova platform add platformname`
 3. `cordova emulate platformname`
 
-## Key Commands
+### Key Commands
 
 - `cordova prepare` in /example/ this compiles non-native assets (html/css/js)
 - `cordova plugin rm cordova-plugin-feed-fm && cordova plugin add cordova-plugin-feed-fm --searchpath=../ --noregistry` in /example/ to reinstall plugin, useful for js interface changes
