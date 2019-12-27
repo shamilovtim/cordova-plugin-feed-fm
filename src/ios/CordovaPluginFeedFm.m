@@ -65,7 +65,9 @@
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{
         @"type":@"REQUEST_CLIENT_ID",
-        @"ClientID":str
+        @"payload":@{
+                @"ClientID":str
+        }
     }];
     [pluginResult setKeepCallbackAsBool:true];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
@@ -98,14 +100,16 @@
     NSLog(@"cannot set station with id, %@ and index %lu", id, index);
     if (index == NSNotFound) {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{
-            @"type":@"SET_ACTIVE_STATION_FAIL"
+            @"type":@"SET_ACTIVE_STATION_FAIL",
+            @"payload":@""
         }];
         return;
     }
 
     _player.activeStation = _player.stationList[index];
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{
-        @"type":@"SET_ACTIVE_STATION_SUCCESS"
+        @"type":@"SET_ACTIVE_STATION_SUCCESS",
+        @"payload":@""
     }];
     NSLog(@"did set station with id, %@ and index %lu", id, index);
 }
@@ -148,7 +152,9 @@
 
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{
             @"type":@"INITIALIZE_FAIL",
-            @"available": @NO
+            @"payload":@{
+                    @"available": @NO
+            }
         }];
 
         [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
@@ -173,7 +179,9 @@
     if(str != nil){
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{
             @"type":@"NEW_CLIENT_ID",
-            @"ClientID":str
+            @"payload":@{
+                    @"ClientID":str
+            }
         }];
         [pluginResult setKeepCallbackAsBool:true];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
@@ -184,7 +192,8 @@
     CDVPluginResult* pluginResult = nil;
 
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{
-        @"type":@"SKIP_FAILED"
+        @"type":@"SKIP_FAILED",
+        @"payload":@""
     }];
 
     [pluginResult setKeepCallbackAsBool:true];
@@ -217,7 +226,9 @@
     // @"state-change"
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{
-        @"type": [self getStringOfState:state] }];
+        @"type": [self getStringOfState:state],
+        @"payload": @""
+    }];
     [pluginResult setKeepCallbackAsBool:true];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
 }
@@ -258,8 +269,6 @@
             return @"UNKNOWN";
     }
 }
-
-
 
 - (void) onCurrentItemDidBeginPlaybackNotification: (NSNotification *)notification {
     FMAudioItem *current = _player.currentItem;
