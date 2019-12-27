@@ -18,6 +18,7 @@ var Logger = function(index) {
     }
 
     p.appendChild(document.createTextNode(`${s}`));
+    console.log(s);
     loggerElements[index].prepend(p);
   };
 
