@@ -36,15 +36,15 @@
 
 ## Library
 
-initialize the plugin and handle all future state with a switch statement. 
+initialize the plugin and handle all future state with a switch statement.
 plugin will respond with the appropriate `msg.type` and `msg.payload` when native state changes.
 
 ```typescript
 CordovaPluginFeedFm.initializeWithToken(
-  successCallback, 
-  errorCallback, 
-  token, 
-  secret, 
+  successCallback,
+  errorCallback,
+  token,
+  secret,
   enableBackgroundMusic
 );
 
@@ -53,15 +53,12 @@ CordovaPluginFeedFm.initializeWithToken(
 ```
 
 Full example of every state that initialize will respond with:
+
 ```typescript
 CordovaPluginFeedFm.initializeWithToken(
   function(msg) {
     switch (msg.type) {
       case "REQUESTING_SKIP":
-        console.log(msg.payload);
-        // your logic here
-        break;
-      case "PLAYBACK_STARTED":
         console.log(msg.payload);
         // your logic here
         break;
@@ -149,46 +146,55 @@ CordovaPluginFeedFm.initializeWithToken(
 ```
 
 set active station
+
 ```typescript
 CordovaPluginFeedFm.setActiveStation(12345);
 ```
 
 play
+
 ```typescript
 CordovaPluginFeedFm.play();
 ```
 
 pause
+
 ```typescript
 CordovaPluginFeedFm.pause();
 ```
 
 skip
+
 ```typescript
 CordovaPluginFeedFm.skip();
 ```
 
 stop
+
 ```typescript
 CordovaPluginFeedFm.stop();
 ```
 
 createNewClientID:
+
 ```typescript
 CordovaPluginFeedFm.createNewClientID();
 ```
 
 setVolume
+
 ```typescript
 CordovaPluginFeedFm.setVolume(5);
 ```
 
 setClientId
+
 ```typescript
 CordovaPluginFeedFm.setClientId(12345);
 ```
 
 requestClientId
+
 ```typescript
 CordovaPluginFeedFm.requestClientId(
   function(msg) {
