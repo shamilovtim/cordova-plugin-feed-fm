@@ -1,7 +1,7 @@
 var exec = require("cordova/exec");
 
-exports.echo = function(success, error, arg0) {
-  exec(success, error, "CordovaPluginFeedFm", "echo", [arg0]);
+exports.echo = function(success, error) {
+  exec(success, error, "CordovaPluginFeedFm", "echo");
 };
 exports.initializeWithToken = function(success, error, token, secret, enableBackgroundMusic) {
   exec(success, error, "CordovaPluginFeedFm", "initializeWithToken", [
@@ -10,28 +10,73 @@ exports.initializeWithToken = function(success, error, token, secret, enableBack
     enableBackgroundMusic
   ]);
 };
-exports.setActiveStation = function(success, error, id) {
-  exec(success, error, "CordovaPluginFeedFm", "setActiveStation", [id]);
+exports.requestClientId = function(success, error) {
+  exec(success, error, "CordovaPluginFeedFm", "requestClientId");
 };
-exports.play = function(success, error, arg0) {
-  exec(success, error, "CordovaPluginFeedFm", "play", [arg0]);
+exports.setActiveStation = function(id) {
+  exec(
+    function() {},
+    function() {},
+    "CordovaPluginFeedFm",
+    "setActiveStation",
+    [id]
+  );
 };
-exports.pause = function(success, error, arg0) {
-  exec(success, error, "CordovaPluginFeedFm", "pause", [arg0]);
+exports.setClientId = function(clientId) {
+  exec(
+    function() {},
+    function() {},
+    "CordovaPluginFeedFm",
+    "setClientId",
+    [clientId]
+  );
 };
-exports.skip = function(success, error, arg0) {
-  exec(success, error, "CordovaPluginFeedFm", "skip", [arg0]);
+exports.setVolume = function(volume) {
+  exec(
+    function() {},
+    function() {},
+    "CordovaPluginFeedFm",
+    "setVolume",
+    [volume]
+  );
 };
-exports.stop = function(success, error, arg0) {
-  exec(success, error, "CordovaPluginFeedFm", "stop", [arg0]);
+exports.play = function() {
+  exec(
+    function() {},
+    function() {},
+    "CordovaPluginFeedFm",
+    "play"
+  );
 };
-exports.setVolume = function(success, error, arg0) {
-  exec(success, error, "CordovaPluginFeedFm", "setVolume", [arg0]);
+exports.pause = function() {
+  exec(
+    function() {},
+    function() {},
+    "CordovaPluginFeedFm",
+    "pause"
+  );
 };
-exports.echojs = function(success, error, arg0) {
-  if (arg0 && typeof arg0 === "string" && arg0.length > 0) {
-    success(arg0);
-  } else {
-    error("Empty message!");
-  }
+exports.skip = function() {
+  exec(
+    function() {},
+    function() {},
+    "CordovaPluginFeedFm",
+    "skip"
+  );
+};
+exports.stop = function() {
+  exec(
+    function() {},
+    function() {},
+    "CordovaPluginFeedFm",
+    "stop"
+  );
+};
+exports.createNewClientID = function() {
+  exec(
+    function() {},
+    function() {},
+    "CordovaPluginFeedFm",
+    "createNewClientID"
+  );
 };
