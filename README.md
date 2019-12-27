@@ -81,10 +81,6 @@ CordovaPluginFeedFm.initializeWithToken(
         console.log(msg.payload);
         // your logic here
         break;
-      case "REQUEST_CLIENT_ID":
-        console.log(msg.payload);
-        // your logic here
-        break;
       case "SKIP_FAIL":
         console.log(msg.payload);
         // your logic here
