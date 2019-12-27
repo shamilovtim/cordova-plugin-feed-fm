@@ -173,8 +173,7 @@ You will need the following global dependencies:
 
 1. `cd example`
 2. `cordova platform add platformname`
-3. `gulp`
-4. `cordova emulate platformname`
+3. `cordova emulate platformname`
 
 ## Key Commands
 
