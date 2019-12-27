@@ -1,5 +1,5 @@
 {
-  "name": "CordovaPluginFeedFm",
+  "name": "cordova-plugin-feed-fm",
   "version": "0.0.1",
   "description": "Cordova Plugin for the native Feed.fm SDK",
   "cordova": {
@@ -19,6 +19,14 @@
     "cordova-ios",
     "cordova-android"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shamilovtim/cordova-plugin-feed-fm.git"
+  },
+  "bugs": {
+    "url": "https://github.com/shamilovtim/cordova-plugin-feed-fm/issues"
+  },
   "author": "Timothy Shamilov",
-  "license": "MIT"
+  "license": "MIT",
+  "homepage": "https://github.com/shamilovtim/cordova-plugin-feed-fm"
 }

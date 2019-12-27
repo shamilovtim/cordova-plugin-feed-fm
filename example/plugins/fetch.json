@@ -2,7 +2,7 @@
   "cordova-plugin-feed-fm": {
     "source": {
       "type": "local",
-      "path": "/Users/admin/Desktop/cordova-plugin-feed-fm/example/node_modules/CordovaPluginFeedFm"
+      "path": "/Users/admin/Desktop/cordova-plugin-feed-fm"
     },
     "is_top_level": true,
     "variables": {}
