@@ -69,8 +69,7 @@
                 @"ClientID":str
         }
     }];
-    [pluginResult setKeepCallbackAsBool:true];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 -(void)setClientId:(CDVInvokedUrlCommand*)command
@@ -192,7 +191,7 @@
     CDVPluginResult* pluginResult = nil;
 
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{
-        @"type":@"SKIP_FAILED",
+        @"type":@"SKIP_FAIL",
         @"payload":@""
     }];
 
