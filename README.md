@@ -52,7 +52,7 @@ CordovaPluginFeedFm.initializeWithToken(
 {type: "NAME_OF_STATE_OR_EVENT", payload:{...}}
 ```
 
-Example:
+Full example of every state that initialize will respond with:
 ```typescript
 CordovaPluginFeedFm.initializeWithToken(
   function(msg) {
