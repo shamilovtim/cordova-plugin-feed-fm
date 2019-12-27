@@ -1,6 +1,5 @@
 <!-- PROJECT SHIELDS -->
 
-[![Contributors][contributors-shield]]()
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 <!-- PROJECT LOGO -->
@@ -188,5 +187,4 @@ You will need the following global dependencies:
 
 <!-- MARKDOWN LINKS & IMAGES -->
 
-[contributors-shield]: https://img.shields.io/badge/contributors-1-orange.svg?style=flat-square
 [product-screenshot]: https://raw.githubusercontent.com/othneildrew/Best-README-Template/master/screenshot.png
