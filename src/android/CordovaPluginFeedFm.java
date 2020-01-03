@@ -65,13 +65,25 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
         }
         if (action.equals("requestClientID")) {
             Log.i("CordovaPluginFeedFm", "Native requestClientID call");
-            this.requestClientID();
+            this.requestClientID(callbackContext);
             return true;
         }
         if (action.equals("setClientID")) {
-            Log.i("CordovaPluginFeedFm", "Native requestClientID call");
+            Log.i("CordovaPluginFeedFm", "Native setClientID call");
             String passedID = args.getString(0);
             this.setClientID(passedID);
+            return true;
+        }
+        if (action.equals("setActiveStation")) {
+            Log.i("CordovaPluginFeedFm", "Native setActiveStation call");
+            Integer stationID = args.getInt(0);
+            this.setActiveStation(stationID);
+            return true;
+        }
+        if (action.equals("setVolume")) {
+            Log.i("CordovaPluginFeedFm", "Native setVolume call");
+            double volume = args.getDouble(0);
+            this.setVolume((float) volume);
             return true;
         }
         if (action.equals("initializeWithToken")) {
@@ -159,10 +171,15 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
         mFeedAudioPlayer.setClientId(clientID);
     }
 
-    public void requestClientID() {
+    public void requestClientID(CallbackContext callbackContext) {
         String clientId = mFeedAudioPlayer.getClientId();
         String response = String.format("{type: REQUEST_CLIENT_ID, payload:{ClientID: %s}}", clientId);
-        sendCordovaCallback(response);
+
+        PluginResult result;
+        result = new PluginResult(PluginResult.Status.OK, response);
+
+        callbackContext.sendPluginResult(result);
+
     }
 
     public void createNewClientID() {
@@ -180,6 +197,27 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
         });
     }
 
+    public void setVolume(float volume) {
+        mFeedAudioPlayer.setVolume(volume);
+    }
+
+    public void setActiveStation(Integer station) {
+
+        boolean flag = false;
+        for (Station st : mFeedAudioPlayer.getStationList()) {
+
+            if (st.getId().toString().equals(station.toString())) {
+                mFeedAudioPlayer.setActiveStation(st);
+                flag = true;
+                break;
+            }
+        }
+        if (!flag) {
+            sendCordovaCallback("{type:SET_ACTIVE_STATION_FAIL, payload:\"\"}");
+            Log.e("CordovaPluginFeedFm", "Cannot set active station to " + station + " because no station found with that id");
+        }
+    }
+
     @Override
     public void onProgressUpdate(Play play, float v, float v1) {
 
@@ -195,7 +233,7 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
         Boolean canSkip = mFeedAudioPlayer.canSkip();
         Integer duration = (int) play.getAudioFile().getDurationInSeconds();
 
-        String response = String.format("{type:PLAYBACK_STARTED, payload: {metadata: %s, id: %s, title: %s, artist: %s, album: %s, canSkip: %s, duration: %d}}", options, id, title, artist, album, canSkip, duration);
+        String response = String.format("{type:PLAYBACK_STARTED, payload: {id: %s, title: %s, artist: %s, album: %s, metadata: %s, canSkip: %s, duration: %d}}", id, title, artist, album, options, canSkip, duration);
 
         sendCordovaCallback(response);
     }
@@ -240,7 +278,7 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
 
     @Override
     public void onStationChanged(Station station) {
-        String response = String.format("{type: STATION_CHANGE, payload: {activeStationId: %d}}", station.getId());
+        String response = String.format("{type: SET_ACTIVE_STATION_SUCCESS, payload: {activeStationId: %d}}", station.getId());
         sendCordovaCallback(response);
     }
 
@@ -256,7 +294,7 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
     private void sendCordovaCallback(String response) {
         PluginResult result;
 
-        result = new PluginResult(PluginResult.Status.ERROR, response);
+        result = new PluginResult(PluginResult.Status.OK, response);
 
         result.setKeepCallback(true);
         cordovaCallback.sendPluginResult(result);
