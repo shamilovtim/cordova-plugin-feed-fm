@@ -121,8 +121,8 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
                     Integer activeStationId = mFeedAudioPlayer.getActiveStation().getId();
                     Boolean available = true;
                     String stations = mFeedAudioPlayer.getStationList().toString();
-                    String response = String.format("{activeStationId: %d, available: %s, stations: %s}", activeStationId, available, stations);
-                    callbackContext.success(response);
+                    String response = String.format("{type:INITIALIZE, payload: { available: %s, stations: %s, activeStationId: %d }}", available, stations, activeStationId);
+                    sendCordovaCallback(response);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -130,8 +130,7 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
 
             @Override
             public void onPlayerUnavailable(Exception e) {
-                String response = String.format("{available: %s}", false);
-                callbackContext.error(response);
+                sendCordovaCallback("{type:INITIALIZE_FAIL, payload:{available: false}}");
             }
         };
 
@@ -162,22 +161,21 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
 
     public void requestClientID() {
         String clientId = mFeedAudioPlayer.getClientId();
-        String response = String.format("{ClientID: %s}", clientId);
-        sendCordovaCallback(response, true);
+        String response = String.format("{type: REQUEST_CLIENT_ID, payload:{ClientID: %s}}", clientId);
+        sendCordovaCallback(response);
     }
 
     public void createNewClientID() {
         mFeedAudioPlayer.createNewClientId(new FeedAudioPlayer.ClientIdListener() {
             @Override
             public void onClientId(String s) {
-                String response = String.format("{ClientID: %s}", s);
-                sendCordovaCallback(response, true);
+                String response = String.format("{type: NEW_CLIENT_ID, payload: {ClientID: %s}}", s);
+                sendCordovaCallback(response);
             }
 
             @Override
             public void onError() {
-                Log.e("CordovaPluginFeedFm", "Error while generating a new client id");
-                sendCordovaCallback("Error while generating a new client id", false);
+                sendCordovaCallback("{type: ERROR_CLIENT_ID, payload:\"\"}");
             }
         });
     }
@@ -197,9 +195,9 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
         Boolean canSkip = mFeedAudioPlayer.canSkip();
         Integer duration = (int) play.getAudioFile().getDurationInSeconds();
 
-        String response = String.format("{metadata: %s, id: %s, title: %s, artist: %s, album: %s, canSkip: %s, duration: %d}", options, id, title, artist, album, canSkip, duration);
+        String response = String.format("{type:PLAYBACK_STARTED, payload: {metadata: %s, id: %s, title: %s, artist: %s, album: %s, canSkip: %s, duration: %d}}", options, id, title, artist, album, canSkip, duration);
 
-        sendCordovaCallback(response, true);
+        sendCordovaCallback(response);
     }
 
     @Override
@@ -209,57 +207,56 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
 
     @Override
     public void onStateChanged(FeedAudioPlayer.State state) {
-//        switch (state) {
-//            case PAUSED:
-//                sendCordovaCallback("paused", true);
-//                break;
-//            case PLAYING:
-//                sendCordovaCallback("playing", true);
-//                break;
-//            case STALLED:
-//                sendCordovaCallback("stalled", true);
-//                break;
-//            case UNAVAILABLE:
-//                sendCordovaCallback("unavailable", true);
-//                break;
-//            case READY_TO_PLAY:
-//                sendCordovaCallback("ready to play", true);
-//                break;
-//            case UNINITIALIZED:
-//                sendCordovaCallback("uninitialized", true);
-//                break;
-//            case WAITING_FOR_ITEM:
-//                sendCordovaCallback("waiting_for_item", true);
-//                break;
-//            case AVAILABLE_OFFLINE_ONLY:
-//                sendCordovaCallback("available_offline_only", true);
-//                break;
-//        }
+        switch (state) {
+            case PAUSED:
+                sendCordovaCallback("{type: PAUSED, payload:\"\" }");
+                break;
+            case PLAYING:
+                sendCordovaCallback("{type: PLAYING, payload:\"\" }");
+                break;
+            case STALLED:
+                sendCordovaCallback("{type: STALLED, payload:\"\" }");
+                break;
+            case UNAVAILABLE:
+                sendCordovaCallback("{type: UNAVAILABLE, payload:\"\" }");
+                break;
+            case READY_TO_PLAY:
+                sendCordovaCallback("{type: READY_TO_PLAY, payload:\"\" }");
+                break;
+            case UNINITIALIZED:
+                sendCordovaCallback("{type: UNINITIALIZED, payload:\"\" }");
+                break;
+            case WAITING_FOR_ITEM:
+                sendCordovaCallback("{type: WAITING_FOR_ITEM, payload:\"\"}");
+                break;
+            case AVAILABLE_OFFLINE_ONLY:
+                sendCordovaCallback("{type: OFFLINE_ONLY, payload:\"\"}");
+                break;
+            default:
+                sendCordovaCallback("{type: UNKNOWN, payload:\"\"}");
+                break;
+        }
     }
 
     @Override
     public void onStationChanged(Station station) {
-        String response = String.format("{activeStationId: %d}", station.getId());
-        sendCordovaCallback(response, true);
+        String response = String.format("{type: STATION_CHANGE, payload: {activeStationId: %d}}", station.getId());
+        sendCordovaCallback(response);
     }
 
     // Skip
     @Override
     public void requestCompleted(boolean b) {
         if (!b) {
-            sendCordovaCallback("out of skips", false);
+            sendCordovaCallback("{type:SKIP_FAIL, payload:\"\"}");
         }
     }
 
     // helper method
-    private void sendCordovaCallback(String response, Boolean isSuccessful) {
+    private void sendCordovaCallback(String response) {
         PluginResult result;
 
-        if (isSuccessful) {
-            result = new PluginResult(PluginResult.Status.OK, response);
-        } else {
-            result = new PluginResult(PluginResult.Status.ERROR, response);
-        }
+        result = new PluginResult(PluginResult.Status.ERROR, response);
 
         result.setKeepCallback(true);
         cordovaCallback.sendPluginResult(result);
