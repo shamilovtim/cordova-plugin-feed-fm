@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.os.Bundle;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -17,20 +18,26 @@ import fm.feed.android.playersdk.FeedAudioPlayer;
 import fm.feed.android.playersdk.FeedPlayerService;
 import fm.feed.android.playersdk.models.Play;
 import fm.feed.android.playersdk.models.Station;
+import fm.feed.android.playersdk.models.StationList;
 
 import android.content.Context;
+
 
 public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlayer.StateListener,
         FeedAudioPlayer.StationChangedListener, FeedAudioPlayer.PlayListener, FeedAudioPlayer.SkipListener {
 
-    private FeedAudioPlayer mFeedAudioPlayer;
+    private static FeedAudioPlayer mFeedAudioPlayer;
     private Context applicationContext;
-    private CallbackContext cordovaCallback;
+    public CallbackContext cordovaCallback;
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         applicationContext = this.cordova.getActivity().getApplicationContext();
-        cordovaCallback = callbackContext;
+
+        // callback was resetting on each execute. this way we preserve it.
+        if (cordovaCallback == null) {
+            cordovaCallback = callbackContext;
+        }
 
         if (action.equals("echo")) {
             Log.i("CordovaPluginFeedFm", "Native echo call");
@@ -39,45 +46,84 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
             return true;
         }
         if (action.equals("play")) {
-            Log.i("CordovaPluginFeedFm", "Native play call");
-            this.play();
+            // exoplayer calls for running on UI thread so I am using runOnUUThread everywhere.
+            // this has ramifications for performance but should be ok.
+            cordova.getActivity().runOnUiThread(new Runnable() {
+                public void run() {
+                    Log.i("CordovaPluginFeedFm", "Native play call");
+                    CordovaPluginFeedFm.play();
+                }
+            });
             return true;
         }
         if (action.equals("pause")) {
-            Log.i("CordovaPluginFeedFm", "Native pause call");
-            this.pause();
+            cordova.getActivity().runOnUiThread(new Runnable() {
+                public void run() {
+                    Log.i("CordovaPluginFeedFm", "Native pause call");
+                    CordovaPluginFeedFm.pause();
+                }
+            });
             return true;
         }
         if (action.equals("skip")) {
-            Log.i("CordovaPluginFeedFm", "Native skip call");
-            this.skip();
+            CordovaPluginFeedFm that = this;
+
+            cordova.getActivity().runOnUiThread(new Runnable() {
+                public void run() {
+                    Log.i("CordovaPluginFeedFm", "Native skip call");
+                    that.skip();
+                }
+            });
             return true;
         }
         if (action.equals("stop")) {
-            Log.i("CordovaPluginFeedFm", "Native stop call");
-            this.stop();
+            CordovaPluginFeedFm that = this;
+
+            cordova.getActivity().runOnUiThread(new Runnable() {
+                public void run() {
+                    Log.i("CordovaPluginFeedFm", "Native stop call");
+                    that.stop();
+                }
+            });
             return true;
         }
         if (action.equals("createNewClientID")) {
-            Log.i("CordovaPluginFeedFm", "Native createNewClientID call");
-            this.createNewClientID();
+            CordovaPluginFeedFm that = this;
+            cordova.getActivity().runOnUiThread(new Runnable() {
+                public void run() {
+                    Log.i("CordovaPluginFeedFm", "Native createNewClientID call");
+                    that.createNewClientID();
+                }
+            });
             return true;
         }
-        if (action.equals("requestClientID")) {
+        if (action.equals("requestClientId")) {
             Log.i("CordovaPluginFeedFm", "Native requestClientID call");
             this.requestClientID(callbackContext);
             return true;
         }
         if (action.equals("setClientID")) {
-            Log.i("CordovaPluginFeedFm", "Native setClientID call");
+            CordovaPluginFeedFm that = this;
             String passedID = args.getString(0);
-            this.setClientID(passedID);
+
+            cordova.getActivity().runOnUiThread(new Runnable() {
+                public void run() {
+                    Log.i("CordovaPluginFeedFm", "Native setClientID call");
+                    that.setClientID(passedID);
+                }
+            });
             return true;
         }
         if (action.equals("setActiveStation")) {
-            Log.i("CordovaPluginFeedFm", "Native setActiveStation call");
+            CordovaPluginFeedFm that = this;
             Integer stationID = args.getInt(0);
-            this.setActiveStation(stationID);
+
+            cordova.getActivity().runOnUiThread(new Runnable() {
+                public void run() {
+                    Log.i("CordovaPluginFeedFm", "Native setActiveStation call");
+                    that.setActiveStation(stationID);
+                }
+            });
             return true;
         }
         if (action.equals("setVolume")) {
@@ -87,14 +133,29 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
             return true;
         }
         if (action.equals("initializeWithToken")) {
-            Log.i("CordovaPluginFeedFm", "Native initializeWithToken call");
+            CordovaPluginFeedFm that = this;
             String token = args.getString(0);
             String secret = args.getString(1);
             Boolean backgroundAudio = args.getBoolean(2);
-            this.initializeWithToken(callbackContext, token, secret, backgroundAudio);
+            cordova.getActivity().runOnUiThread(new Runnable() {
+                public void run() {
+                    Log.i("CordovaPluginFeedFm", "Native initializeWithToken call");
+                    that.initializeWithToken(token, secret, backgroundAudio);
+                }
+            });
             return true;
         }
-        return false;
+
+        cordova.getActivity().runOnUiThread(new Runnable() {
+            public void run() {
+                Log.i("CordovaPluginFeedFm", "did reach end");
+                PluginResult result;
+                result = new PluginResult(PluginResult.Status.NO_RESULT);
+                result.setKeepCallback(true);
+                cordovaCallback.sendPluginResult(result);
+            }
+        });
+        return true;
     }
 
     private void echo(String message, CallbackContext callbackContext) {
@@ -108,11 +169,11 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
         }
     }
 
-    private void play() {
+    public static void play() {
         mFeedAudioPlayer.play();
     }
 
-    private void pause() {
+    private static void pause() {
         mFeedAudioPlayer.pause();
     }
 
@@ -124,7 +185,7 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
         mFeedAudioPlayer.stop();
     }
 
-    public void initializeWithToken(CallbackContext callbackContext, String token, String secret, boolean enableBackgroundMusic) {
+    public void initializeWithToken(String token, String secret, boolean enableBackgroundMusic) {
 
         FeedAudioPlayer.AvailabilityListener listener = new FeedAudioPlayer.AvailabilityListener() {
             @Override
@@ -132,8 +193,12 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
                 try {
                     Integer activeStationId = mFeedAudioPlayer.getActiveStation().getId();
                     Boolean available = true;
-                    String stations = mFeedAudioPlayer.getStationList().toString();
-                    String response = String.format("{type:INITIALIZE, payload: { available: %s, stations: %s, activeStationId: %d }}", available, stations, activeStationId);
+                    StationList stations = mFeedAudioPlayer.getStationList();
+                    GsonBuilder builder = new GsonBuilder();
+                    Gson gson = builder.create();
+                    String stationString = gson.toJson(stations);
+                    String response = String.format("{\"type\":\"INITIALIZE\", \"payload\": { \"available\": \"%s\", \"stations\": %s, \"activeStationId\": \"%d\" }}", available, stationString, activeStationId);
+
                     sendCordovaCallback(response);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -142,7 +207,11 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
 
             @Override
             public void onPlayerUnavailable(Exception e) {
-                sendCordovaCallback("{type:INITIALIZE_FAIL, payload:{available: false}}");
+                try {
+                    sendCordovaCallback("{\"type\":\"INITIALIZE_FAIL\", \"payload\":{\"available\": \"false\"}}");
+                } catch (Exception ej) {
+
+                }
             }
         };
 
@@ -172,27 +241,38 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
     }
 
     public void requestClientID(CallbackContext callbackContext) {
-        String clientId = mFeedAudioPlayer.getClientId();
-        String response = String.format("{type: REQUEST_CLIENT_ID, payload:{ClientID: %s}}", clientId);
+        try {
+            String clientId = mFeedAudioPlayer.getClientId();
+            String responseString = String.format("{\"type\": \"REQUEST_CLIENT_ID\", \"payload\":{\"ClientID\": \"%s\"}}", clientId);
+            JSONObject response = new JSONObject(responseString);
 
-        PluginResult result;
-        result = new PluginResult(PluginResult.Status.OK, response);
+            PluginResult result;
+            result = new PluginResult(PluginResult.Status.OK, response);
 
-        callbackContext.sendPluginResult(result);
-
+            callbackContext.sendPluginResult(result);
+        } catch (Exception e) {
+        }
     }
 
     public void createNewClientID() {
         mFeedAudioPlayer.createNewClientId(new FeedAudioPlayer.ClientIdListener() {
             @Override
             public void onClientId(String s) {
-                String response = String.format("{type: NEW_CLIENT_ID, payload: {ClientID: %s}}", s);
-                sendCordovaCallback(response);
+                try {
+                    String response = String.format("{\"type\": \"NEW_CLIENT_ID\", \"payload\": {\"ClientID\": \"%s\"}}", s);
+                    sendCordovaCallback(response);
+                } catch (Exception e) {
+
+                }
             }
 
             @Override
             public void onError() {
-                sendCordovaCallback("{type: ERROR_CLIENT_ID, payload:\"\"}");
+                try {
+                    sendCordovaCallback("{\"type\": \"ERROR_CLIENT_ID\", \"payload\":\"\"}");
+                } catch (Exception e) {
+
+                }
             }
         });
     }
@@ -203,19 +283,24 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
 
     public void setActiveStation(Integer station) {
 
-        boolean flag = false;
-        for (Station st : mFeedAudioPlayer.getStationList()) {
+        try {
+            boolean flag = false;
+            for (Station st : mFeedAudioPlayer.getStationList()) {
 
-            if (st.getId().toString().equals(station.toString())) {
-                mFeedAudioPlayer.setActiveStation(st);
-                flag = true;
-                break;
+                if (st.getId().toString().equals(station.toString())) {
+                    mFeedAudioPlayer.setActiveStation(st);
+                    flag = true;
+                    break;
+                }
             }
+            if (!flag) {
+                sendCordovaCallback("{\"type\":\"SET_ACTIVE_STATION_FAIL\", \"payload\":\"\"}");
+                Log.e("CordovaPluginFeedFm", "Cannot set active station to " + station + " because no station found with that id");
+            }
+        } catch (Exception e) {
+
         }
-        if (!flag) {
-            sendCordovaCallback("{type:SET_ACTIVE_STATION_FAIL, payload:\"\"}");
-            Log.e("CordovaPluginFeedFm", "Cannot set active station to " + station + " because no station found with that id");
-        }
+
     }
 
     @Override
@@ -225,17 +310,22 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
 
     @Override
     public void onPlayStarted(Play play) {
-        String options = play.getAudioFile().getOptions().toString();
-        String id = play.getAudioFile().getId();
-        String title = play.getAudioFile().getTrack().getTitle();
-        String artist = play.getAudioFile().getArtist().getName();
-        String album = play.getAudioFile().getRelease().getTitle();
-        Boolean canSkip = mFeedAudioPlayer.canSkip();
-        Integer duration = (int) play.getAudioFile().getDurationInSeconds();
+        try {
+            Log.i("CordovaPluginFeedFm", "on play started");
+            String options = play.getAudioFile().getOptions().toString();
+            String id = play.getAudioFile().getId();
+            String title = play.getAudioFile().getTrack().getTitle();
+            String artist = play.getAudioFile().getArtist().getName();
+            String album = play.getAudioFile().getRelease().getTitle();
+            Boolean canSkip = mFeedAudioPlayer.canSkip();
+            Integer duration = (int) play.getAudioFile().getDurationInSeconds();
 
-        String response = String.format("{type:PLAYBACK_STARTED, payload: {id: %s, title: %s, artist: %s, album: %s, metadata: %s, canSkip: %s, duration: %d}}", id, title, artist, album, options, canSkip, duration);
+            String response = String.format("{\"type\":\"PLAYBACK_STARTED\", \"payload\": {\"id\": \"%s\", \"title\": \"%s\", \"artist\": \"%s\", \"album\": \"%s\", \"metadata\": \"%s\", \"canSkip\": \"%s\", \"duration\": \"%d\"}}", id, title, artist, album, options, canSkip, duration);
 
-        sendCordovaCallback(response);
+            sendCordovaCallback(response);
+        } catch (Exception e) {
+
+        }
     }
 
     @Override
@@ -245,70 +335,76 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
 
     @Override
     public void onStateChanged(FeedAudioPlayer.State state) {
-        switch (state) {
-            case PAUSED:
-                sendCordovaCallback("{type: PAUSED, payload:\"\" }");
-                break;
-            case PLAYING:
-                sendCordovaCallback("{type: PLAYING, payload:\"\" }");
-                break;
-            case STALLED:
-                sendCordovaCallback("{type: STALLED, payload:\"\" }");
-                break;
-            case UNAVAILABLE:
-                sendCordovaCallback("{type: UNAVAILABLE, payload:\"\" }");
-                break;
-            case READY_TO_PLAY:
-                sendCordovaCallback("{type: READY_TO_PLAY, payload:\"\" }");
-                break;
-            case UNINITIALIZED:
-                sendCordovaCallback("{type: UNINITIALIZED, payload:\"\" }");
-                break;
-            case WAITING_FOR_ITEM:
-                sendCordovaCallback("{type: WAITING_FOR_ITEM, payload:\"\"}");
-                break;
-            case AVAILABLE_OFFLINE_ONLY:
-                sendCordovaCallback("{type: OFFLINE_ONLY, payload:\"\"}");
-                break;
-            default:
-                sendCordovaCallback("{type: UNKNOWN, payload:\"\"}");
-                break;
+        try {
+            Log.i("CordovaPluginFeedFm", "state change");
+            switch (state) {
+                case PAUSED:
+                    sendCordovaCallback("{\"type\": \"PAUSED\", \"payload\":\"\" }");
+                    break;
+                case PLAYING:
+                    sendCordovaCallback("{\"type\": \"PLAYING\", \"payload\":\"\" }");
+                    break;
+                case STALLED:
+                    sendCordovaCallback("{\"type\": \"STALLED\", \"payload\":\"\" }");
+                    break;
+                case UNAVAILABLE:
+                    sendCordovaCallback("{\"type\": \"UNAVAILABLE\", \"payload\":\"\" }");
+                    break;
+                case READY_TO_PLAY:
+                    sendCordovaCallback("{\"type\": \"READY_TO_PLAY\", \"payload\":\"\"}");
+                    break;
+                case UNINITIALIZED:
+                    sendCordovaCallback("{\"type\": \"UNINITIALIZED\", \"payload\":\"\" }");
+                    break;
+                case WAITING_FOR_ITEM:
+                    sendCordovaCallback("{\"type\": \"WAITING_FOR_ITEM\", \"payload\":\"\"}");
+                    break;
+                case AVAILABLE_OFFLINE_ONLY:
+                    sendCordovaCallback("{\"type\": \"OFFLINE_ONLY\", \"payload\":\"\"}");
+                    break;
+                default:
+                    sendCordovaCallback("{\"type\": \"UNKNOWN\", \"payload\":\"\"}");
+                    break;
+            }
+        } catch (Exception e) {
+
         }
     }
 
     @Override
     public void onStationChanged(Station station) {
-        String response = String.format("{type: SET_ACTIVE_STATION_SUCCESS, payload: {activeStationId: %d}}", station.getId());
-        sendCordovaCallback(response);
+        try {
+            String response = String.format("{\"type\": \"SET_ACTIVE_STATION_SUCCESS\", \"payload\": {\"activeStationId\": \"%d\"}}", station.getId());
+            sendCordovaCallback(response);
+        } catch (Exception e) {
+
+        }
     }
 
     // Skip
     @Override
     public void requestCompleted(boolean b) {
         if (!b) {
-            sendCordovaCallback("{type:SKIP_FAIL, payload:\"\"}");
+            try {
+                sendCordovaCallback("{\"type\":\"SKIP_FAIL\", payload:\"\"}");
+            } catch (Exception e) {
+
+            }
         }
     }
 
     // helper method
-    private void sendCordovaCallback(String response) {
+    private void sendCordovaCallback(String responseString) throws JSONException {
+        JSONObject response = new JSONObject(responseString);
+
         PluginResult result;
-
-        result = new PluginResult(PluginResult.Status.OK, response);
-
+        result = new PluginResult(PluginResult.Status.NO_RESULT, response);
         result.setKeepCallback(true);
         cordovaCallback.sendPluginResult(result);
-    }
 
-    // helper method
-    private static Gson createDefaultGson() {
-        GsonBuilder builder = new GsonBuilder();
-        return builder.create();
+        PluginResult realResult;
+        realResult = new PluginResult(PluginResult.Status.OK, response);
+        realResult.setKeepCallback(true);
+        cordovaCallback.sendPluginResult(realResult);
     }
-
-    // helper method
-    private String toJson(Object json) {
-        return createDefaultGson().toJson(json);
-    }
-
 }
