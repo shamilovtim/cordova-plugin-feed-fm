@@ -10,7 +10,6 @@
   </a>
   <h3 align="center">Cordova plugin for Feed.FM FeedMedia native SDK</h2>
   <h4 align="center">By: Timothy Shamilov</h4>
-  <p align="center">Still in development</p>
   <p align="center">
     Uses the FeedMedia CocoaPod on iOS and Feed Gradle package
   </p>
@@ -24,9 +23,9 @@
 ### Prerequisites
 
 - Cordova-iOS 5.x.x or higher
-- Cordova-Android 8.x.x or higher
+- Cordova-Android x.x.x
 
-### Library
+### Using the plugin
 
 initialize the plugin and handle all future state with a switch statement.
 plugin will respond with the appropriate `msg.type` and `msg.payload` when native state changes.
@@ -196,7 +195,7 @@ CordovaPluginFeedFm.requestClientId(
 );
 ```
 
-# Development
+# Contributing to this plugin
 
 The dev environment used for this project was macOS. Instructions for any other OS aren't provided and will be unreliable.
 
@@ -204,14 +203,21 @@ You will need the following global dependencies:
 
 - npm
 - cordova
-- gulp-cli
 
 ### Directory Structure
 
+Key files
+
 ```sh
 .
-├── example       # cordova example project
-├── plugin        # plugin source
+├── example           # cordova example project
+│   ├── www           # example assets
+|   ├── package.json  # example config
+|
+├── src               # plugin native source
+├── www               # plugin js interface
+├── plugin.xml        # cordova plugin config
+├── package.json      # npm config
 ```
 
 ### Setting up local env
