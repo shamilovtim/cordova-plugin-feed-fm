@@ -5,8 +5,4 @@
 
 @property (nonatomic, weak) FMAudioPlayer *player;
 
-- (void)echo:(CDVInvokedUrlCommand*)command;
-- (void)play:(CDVInvokedUrlCommand*)command;
-- (void)pause:(CDVInvokedUrlCommand*)command;
-
 @end
