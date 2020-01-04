@@ -16,10 +16,6 @@ var app = {
             logger().log("did reach case PLAYBACK_STARTED");
             logger().log(JSON.stringify(msg.payload, null, 4));
             break;
-          case "PLAYBACK_STARTED":
-            logger().log("did reach case PLAYBACK_STARTED");
-            logger().log(JSON.stringify(msg.payload, null, 4));
-            break;
           case "NEW_CLIENT_ID":
             logger().log("did reach case NEW_CLIENT_ID");
             logger().log(JSON.stringify(msg.payload, null, 4));
@@ -30,10 +26,6 @@ var app = {
             break;
           case "SET_ACTIVE_STATION_FAIL":
             logger().log("did reach case SET_ACTIVE_STATION_FAIL");
-            logger().log(JSON.stringify(msg.payload, null, 4));
-            break;
-          case "REQUEST_CLIENT_ID":
-            logger().log("did reach case REQUEST_CLIENT_ID");
             logger().log(JSON.stringify(msg.payload, null, 4));
             break;
           case "SKIP_FAIL":
@@ -96,7 +88,9 @@ var app = {
             break;
         }
       },
-      function(err) {},
+      function(err) {
+        console.log("error1515");
+      },
       "cc1783f3b77faefebc3b4065665cf316f1bc34d2",
       "711ac508971f37972eeef5a153239587812fc7dd",
       false
@@ -108,7 +102,7 @@ var app = {
       function(success) {
         console.log("echo success", success);
         logger().log(JSON.stringify(success, null, 4));
-        logger().log("echo success returned::");
+        logger().log("echo success returned:" + success);
       },
       function(err) {
         console.log("echo fail ", err);
@@ -137,7 +131,7 @@ var app = {
     console.log("requestClientId method called");
     CordovaPluginFeedFm.requestClientId(
       function(success) {
-        logger().log(JSON.stringify(success, null, 4));
+        logger().log(JSON.stringify(success.payload, null, 4));
         logger().log("requestClientId success returned:");
       },
       function(error) {}
@@ -145,11 +139,11 @@ var app = {
   },
   setVolume: function() {
     console.log("setVolume method called");
-    CordovaPluginFeedFm.setVolume(5);
+    CordovaPluginFeedFm.setVolume(6);
   },
   setActiveStation: function() {
     console.log("setActiveStation method called");
-    CordovaPluginFeedFm.setActiveStation("175692");
+    CordovaPluginFeedFm.setActiveStation("190557");
   },
   setupListeners: function() {
     // listen for initializeWithToken button
