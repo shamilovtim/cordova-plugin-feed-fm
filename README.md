@@ -22,7 +22,7 @@
 
 ### Prerequisites
 
-- Cordova CLI(`cordova -v`) 9.x.x or higher
+- Cordova CLI (`cordova -v`) 9.x.x or higher
 - Cordova-iOS 5.x.x or higher
 - Cordova-Android x.x.x
 
