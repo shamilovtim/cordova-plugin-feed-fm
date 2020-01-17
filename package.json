@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-feed-fm",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Cordova Plugin for the native Feed.fm SDK",
   "cordova": {
     "id": "cordova-plugin-feed-fm",
