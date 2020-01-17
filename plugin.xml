@@ -16,15 +16,78 @@
         </config-file>
         <header-file src="src/ios/CordovaPluginFeedFm.h" />
         <source-file src="src/ios/CordovaPluginFeedFm.m" />
-        <podspec>
-            <config>
-                <source url="https://github.com/feedfm/iOS-SDK.git" />
-                <source url="https://github.com/CocoaPods/Specs.git"/>
-            </config>
-            <pods use-frameworks="true">
-                <pod name="FeedMedia" spec="~> 4.3.6" />
-            </pods>
-        </podspec>
+
+        <source-file src="src/ios/FeedMedia/libFeedMediaCore.a" framework="true" />
+
+        <header-file src="src/ios/FeedMedia/FeedMediaCore.h" />
+
+        <header-file src="src/ios/FeedMedia/CWStatusBarNotification.h" />
+
+        <header-file src="src/ios/FeedMedia/FeedMedia.h" />
+
+        <header-file src="src/ios/FeedMedia/FeedMediaCoreProxy.h" />
+
+        <header-file src="src/ios/FeedMedia/FMActivityIndicator.h" />
+        <source-file src="src/ios/FeedMedia/FMActivityIndicator.m" />
+
+        <header-file src="src/ios/FeedMedia/FMAudioItem.h" />
+
+        <header-file src="src/ios/FeedMedia/FMAudioPlayer.h" />
+
+        <header-file src="src/ios/FeedMedia/FMDislikeButton.h" />
+        <source-file src="src/ios/FeedMedia/FMDislikeButton.m" />
+
+        <header-file src="src/ios/FeedMedia/FMElapsedTimeLabel.h" />
+        <source-file src="src/ios/FeedMedia/FMElapsedTimeLabel.m" />
+
+        <header-file src="src/ios/FeedMedia/FMEqualizer.h" />
+        <source-file src="src/ios/FeedMedia/FMEqualizer.m" />
+
+        <header-file src="src/ios/FeedMedia/FMError.h" />
+
+        <header-file src="src/ios/FeedMedia/FMLikeButton.h" />
+        <source-file src="src/ios/FeedMedia/FMLikeButton.m" />
+
+        <header-file src="src/ios/FeedMedia/FMLockScreenDelegate.h" />
+
+        <header-file src="src/ios/FeedMedia/FMLog.h" />
+
+        <header-file src="src/ios/FeedMedia/FMMetadataLabel.h" />
+        <source-file src="src/ios/FeedMedia/FMMetadataLabel.m" />
+
+        <header-file src="src/ios/FeedMedia/FMPlayPauseButton.h" />
+        <source-file src="src/ios/FeedMedia/FMPlayPauseButton.m" />
+
+        <header-file src="src/ios/FeedMedia/FMProgressView.h" />
+        <source-file src="src/ios/FeedMedia/FMProgressView.m" />
+
+        <header-file src="src/ios/FeedMedia/FMRemainingTimeLabel.h" />
+        <source-file src="src/ios/FeedMedia/FMRemainingTimeLabel.m" />
+
+        <header-file src="src/ios/FeedMedia/FMShareButton.h" />
+        <source-file src="src/ios/FeedMedia/FMShareButton.m" />
+
+        <header-file src="src/ios/FeedMedia/FMSkipButton.h" />
+        <source-file src="src/ios/FeedMedia/FMSkipButton.m" />
+
+        <header-file src="src/ios/FeedMedia/FMSkipWarningView.h" />
+        <source-file src="src/ios/FeedMedia/FMSkipWarningView.m" />
+
+        <header-file src="src/ios/FeedMedia/FMStation.h" />
+
+        <header-file src="src/ios/FeedMedia/FMStationArray.h" />
+
+        <header-file src="src/ios/FeedMedia/FMStationButton.h" />
+        <source-file src="src/ios/FeedMedia/FMStationButton.m" />
+
+        <header-file src="src/ios/FeedMedia/FMStationCrossfader.h" />
+        <source-file src="src/ios/FeedMedia/FMStationCrossfader.m" />
+
+        <header-file src="src/ios/FeedMedia/FMTotalTimeLabel.h" />
+        <source-file src="src/ios/FeedMedia/FMTotalTimeLabel.m" />
+
+        <header-file src="src/ios/FeedMedia/MarqueeLabel.h" />
+        <source-file src="src/ios/FeedMedia/MarqueeLabel.m" />
     </platform>
     <platform name="android">
         <config-file target="config.xml" parent="/*">
