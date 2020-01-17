@@ -1,5 +1,5 @@
 #import <Cordova/CDVPlugin.h>
-#import "FeedMedia/FeedMediaCore.h"
+#import "FeedMediaCore.h"
 
 @interface CordovaPluginFeedFm : CDVPlugin
 

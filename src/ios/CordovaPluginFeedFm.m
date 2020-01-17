@@ -1,6 +1,6 @@
 #import "CordovaPluginFeedFm.h"
 #import <Cordova/CDVPlugin.h>
-#import "FeedMedia/FeedMediaCore.h"
+#import "FeedMediaCore.h"
 
 @implementation CordovaPluginFeedFm {
     NSString* callbackId;
