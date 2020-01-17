@@ -24,8 +24,8 @@
       "cordova-plugin-feed-fm": {}
     },
     "platforms": [
-      "ios",
-      "android"
+      "android",
+      "ios"
     ]
   }
 }
