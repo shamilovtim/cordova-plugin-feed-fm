@@ -235,7 +235,7 @@ Key files
 
 [product-screenshot]: https://raw.githubusercontent.com/othneildrew/Best-README-Template/master/screenshot.png
 
-### Troubleshooting
+# Troubleshooting
 Experiencing bug:
 - "D8: Program type already present: android.support.v4.media.MediaBrowserCompat$ConnectionCallback$StubApi21"
   - Solution: `cordova plugin add cordova-plugin-androidx && cordova plugin add cordova-plugin-androidx-adapter`
