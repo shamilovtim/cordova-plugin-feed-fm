@@ -24,7 +24,7 @@
 
 #if TARGET_OS_TV
 #else
-#import <MarqueeLabel/MarqueeLabel.h>
+#import "MarqueeLabel.h"
 #endif
 
 /**
