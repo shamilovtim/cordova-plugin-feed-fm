@@ -16,7 +16,7 @@
 #ifdef COCOAPODS
 #include "FeedMediaCore.h"
 #else
-#include "FeedMediaCore.h"
+#include <FeedMediaCore/FeedMediaCore.h>
 #endif
 
 #endif /* FeedMediaCoreProxy_h */
