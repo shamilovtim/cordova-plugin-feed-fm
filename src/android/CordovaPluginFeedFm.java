@@ -227,6 +227,7 @@ public class CordovaPluginFeedFm extends CordovaPlugin implements FeedAudioPlaye
                     .setSecret(secret)
                     .setContext(applicationContext)
                     .setAvailabilityListener(listener)
+                    .setRequestFocus(false)
                     .build();
         }
 
