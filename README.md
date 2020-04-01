@@ -11,7 +11,7 @@
   <h3 align="center">Cordova plugin for Feed.FM FeedMedia native SDK</h2>
   <h4 align="center">By: Timothy Shamilov</h4>
   <p align="center">
-    Includes IOS Feed.fm SDK version 5.3.3 and the Feed Gradle package (latest version)
+    Includes IOS Feed.fm SDK version 4.3.10 and the Feed Gradle package 5.3.5
   </p>
     <p align="center">
     Objective-C & Java
