@@ -223,8 +223,8 @@ Key files
 ### Setting up local env
 
 1. `cd example`
-2. `cordova platform add platformname`
-3. `cordova emulate platformname`
+2. `cordova platform add ios@latest` and `cordova platform add android@latest`
+3. `cordova emulate ios` or `cordova emulate android`
 
 ### Key Commands
 
@@ -239,3 +239,5 @@ Key files
 Experiencing bug:
 - "D8: Program type already present: android.support.v4.media.MediaBrowserCompat$ConnectionCallback$StubApi21"
   - Solution: `cordova plugin add cordova-plugin-androidx && cordova plugin add cordova-plugin-androidx-adapter`
+  
+If adding a platform fails, try removing and adding it again. There's some weird cacheing that happens in the CLI.
